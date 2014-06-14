@@ -14,7 +14,6 @@ import java.util.Map;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -77,17 +76,16 @@ public class ConditionGreaterTest extends DBUnitTest {
 	}
 	
 	@Test
-	@Ignore
 	@Parameters(method = "databases")
 	public void should_return_greater_than_date(SQLDialectDatasource dialectDatasource) {
 		prepare(dialectDatasource);
-		Calendar cal = Calendar.getInstance();
+		final Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.YEAR, 1981);
 		QueryResult result = dsl
 				
 				.select(C_DATE_OF_BIRTH, C_AGE)
 				.from(VIEW_NAME)
-				.where(greater(C_DATE_OF_BIRTH, cal.getTime()))
+				.where(greater(C_DATE_OF_BIRTH, new java.sql.Date(cal.getTime().getTime()))) // necessary for Oracle
 				.getResult();
 		
 		assertThat(result.getTotalRecords()).isEqualTo(5);
@@ -96,7 +94,7 @@ public class ConditionGreaterTest extends DBUnitTest {
 			@Override
 			public boolean matches(Map<String,Object> value) {
 				Date dateOfBirth = (Date) value.get(C_DATE_OF_BIRTH);
-				return true;
+				return cal.getTime().before(dateOfBirth);
 			}
 			
 		});
