@@ -1,23 +1,23 @@
 package pl.coffeecode.coffeerepo.impl.predicate.condition;
 
-import pl.coffeecode.coffeerepo.impl.predicate.ConditionImpl;
+import pl.coffeecode.coffeerepo.api.Condition;
 
-public abstract class BaseCondition extends ConditionImpl {
+import com.google.common.collect.ImmutableList;
+
+public abstract class BaseCondition implements Condition {
 	
 	protected String column;
 	
-	public abstract String toSQL();
-
+	public ImmutableList<Object> getBindValues() {
+		return ImmutableList.of();
+	}
+	
 	protected BaseCondition(String column) {
 		this.column = column;
 	}
 
 	public String getColumn() {
 		return column;
-	}
-
-	public void setColumn(String column) {
-		this.column = column;
 	}
 
 	@Override

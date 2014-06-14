@@ -2,32 +2,44 @@ package pl.coffeecode.coffeerepo.impl;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 
 import javax.sql.DataSource;
 
-import pl.coffeecode.coffeerepo.api.DBDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import pl.coffeecode.coffeerepo.api.QueryAttributes;
 import pl.coffeecode.coffeerepo.api.QueryResult;
+import pl.coffeecode.coffeerepo.impl.driver.DatabaseDriver;
 
-import com.google.common.cache.LoadingCache;
+import com.google.common.cache.Cache;
 
 public class QueryCache extends QueryExecutor {
 	
-	private final LoadingCache<String,QueryResult> cache;
+	private static final Logger logger = LoggerFactory.getLogger(QueryCache.class);
 	
-	QueryCache(DataSource dataSource, DBDriver sqlDialect, LoadingCache<String,QueryResult> cache) {
+	private final Cache<QueryAttributes,QueryResult> cache;
+	
+	QueryCache(DataSource dataSource, DatabaseDriver sqlDialect, Cache<QueryAttributes,QueryResult> cache) {
 		super(dataSource, sqlDialect);
 		checkNotNull(cache);
 		this.cache = cache;
 	}
 	
 	@Override
-	public QueryResult getResult(QueryAttributes attributes) {
-		String sql = getSQL(attributes); 
+	public QueryResult getResult(final QueryAttributes attributes) {
 		try {
-			return (QueryResult) cache.get(sql);
+			return (QueryResult) cache.get(attributes,
+					new Callable<QueryResult>() {
+						@Override
+						public QueryResult call() {
+							return QueryCache.super.getResult(attributes);
+						}
+					});
 		} catch (ExecutionException ex) {
+			logger.warn("Problem with loading from cache, we are trying to retrive data from database!");
 			return super.getResult(attributes);
 		}
 	}

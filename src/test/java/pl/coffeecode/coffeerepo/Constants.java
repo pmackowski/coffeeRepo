@@ -2,8 +2,6 @@ package pl.coffeecode.coffeerepo;
 
 public class Constants {
 	
-	public static final String DATASET_FILE = "dbunit/test_users.xml";
-	
 	public static final String VIEW_NAME = "TEST_USER";
 	
 	public static final String C_ID = "ID";

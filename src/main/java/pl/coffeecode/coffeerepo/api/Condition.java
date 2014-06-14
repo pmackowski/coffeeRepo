@@ -1,13 +1,12 @@
 package pl.coffeecode.coffeerepo.api;
 
+import pl.coffeecode.coffeerepo.impl.driver.ConditionVisitor;
+
+import com.google.common.collect.ImmutableList;
+
 public interface Condition {
 	
-	Condition and(Condition cond);
+	String toSQL(ConditionVisitor visitor);
 	
-	Condition or(Condition cond);
-
-	Condition not();
-	
-	String toSQL();
-	
+	ImmutableList<Object> getBindValues();
 }

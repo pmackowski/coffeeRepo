@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<dataset>
+    <!--  equal -->
+    <TEST_USER ID="1" NAME="Pawel" />
+	<TEST_USER ID="2" NAME="Pawel" />
+	<!--  does not equal -->
+	<TEST_USER ID="3" NAME="PAWEL" />
+	<TEST_USER ID="4" NAME="Pawel2" />
+	<TEST_USER ID="5"  />
+	
+</dataset>

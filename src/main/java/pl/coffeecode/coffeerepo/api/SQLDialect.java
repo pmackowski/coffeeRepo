@@ -1,14 +1,17 @@
 package pl.coffeecode.coffeerepo.api;
 
-import pl.coffeecode.coffeerepo.impl.driver.H2Driver;
+import pl.coffeecode.coffeerepo.impl.driver.DatabaseDriver;
+import pl.coffeecode.coffeerepo.impl.driver.h2.H2Driver;
+import pl.coffeecode.coffeerepo.impl.driver.oracle.OracleDriver;
 
-public enum SQLDialect implements DBDriver {
+public enum SQLDialect implements DatabaseDriver {
 	
-	H2(new H2Driver());
+	H2(new H2Driver()),
+	Oracle(new OracleDriver());
 
-	private DBDriver driver;
+	private DatabaseDriver driver;
 	
-	SQLDialect(DBDriver driver) {
+	SQLDialect(DatabaseDriver driver) {
 		this.driver = driver;
 	}
 	
@@ -20,4 +23,5 @@ public enum SQLDialect implements DBDriver {
 	public String createCountSQL(QueryAttributes attributes) {
 		return driver.createCountSQL(attributes);
 	}
+
 }

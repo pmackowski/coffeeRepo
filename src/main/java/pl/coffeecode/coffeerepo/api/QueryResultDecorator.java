@@ -45,6 +45,7 @@ public class QueryResultDecorator {
 			return this;
 		}
 		
+		@SuppressWarnings("rawtypes")
 		public Builder column(String column, CellFunction cellFunction) {
 			Map<Integer, Object> map = table.column(column);
 			for (Integer key : map.keySet()) {

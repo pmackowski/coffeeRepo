@@ -1,5 +1,7 @@
 package pl.coffeecode.coffeerepo.impl.predicate.condition;
 
+import pl.coffeecode.coffeerepo.impl.driver.ConditionVisitor;
+
 public class ConditionIsNotNull extends BaseCondition {
 
 	public ConditionIsNotNull(String column) {
@@ -7,8 +9,8 @@ public class ConditionIsNotNull extends BaseCondition {
 	}
 
 	@Override
-	public String toSQL() {
-		return column + " IS NOT NULL";
+	public String toSQL(ConditionVisitor driver) {
+		return driver.toSQL(this);
 	}
 
 	@Override

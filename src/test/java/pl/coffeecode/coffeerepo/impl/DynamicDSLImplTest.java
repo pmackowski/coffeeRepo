@@ -2,25 +2,15 @@ package pl.coffeecode.coffeerepo.impl;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import static pl.coffeecode.coffeerepo.api.Predicate.asc;
 import static pl.coffeecode.coffeerepo.api.Predicate.desc;
-import static pl.coffeecode.coffeerepo.api.Predicate.eq;
-
-import javax.sql.DataSource;
+import static pl.coffeecode.coffeerepo.api.Predicate.equal;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.common.collect.ImmutableList;
-
 import pl.coffeecode.coffeerepo.api.Condition;
-import pl.coffeecode.coffeerepo.api.DynamicDSL;
 import pl.coffeecode.coffeerepo.api.Order;
-import pl.coffeecode.coffeerepo.api.QueryAttributes;
-import pl.coffeecode.coffeerepo.api.SQLDialect;
-import pl.coffeecode.coffeerepo.impl.DynamicDSLImpl;
-import pl.coffeecode.coffeerepo.impl.QueryExecutor;
 import pl.coffeecode.coffeerepo.impl.AbstractDSL.QueryAttributesImpl;
 
 public class DynamicDSLImplTest {
@@ -57,21 +47,21 @@ public class DynamicDSLImplTest {
 	public void tdcdwdqdescads() {
 		Condition nullCondition = null;
 		DynamicDSLImpl dsl = (DynamicDSLImpl) newDynamicDSLImpl()
-									.whereIgnoreNulls(nullCondition,eq("col1",8));
+									.whereIgnoreNulls(nullCondition,equal("col1",8));
 		
-		assertThat(dsl.attributes.getCondition()).isEqualTo(eq("col1",8));
+		assertThat(dsl.attributes.getCondition()).isEqualTo(equal("col1",8));
 	}
 	
 	@Test
 	public void tes() {
 		DynamicDSLImpl dsl = (DynamicDSLImpl) newDynamicDSLImpl()
-									.where(eq("col1",8))
+									.where(equal("col1",8))
 									.orderBy(asc("col2"), desc("col1"))
 									.limit(10,1);
 		
 		assertThat(dsl.attributes.getViewName()).isEqualTo("view1");
 		assertThat(dsl.attributes.getColumns()).containsExactly("col1","col2");
-		assertThat(dsl.attributes.getCondition()).isEqualTo(eq("col1",8));
+		assertThat(dsl.attributes.getCondition()).isEqualTo(equal("col1",8));
 		assertThat(dsl.attributes.getOrders()).containsExactly(asc("col2"), desc("col1"));
 		assertThat(dsl.attributes.getNumberOfRows()).isEqualTo(10);
 		assertThat(dsl.attributes.getPage()).isEqualTo(1);
@@ -124,18 +114,8 @@ public class DynamicDSLImplTest {
 	}
 	
 	@Test(expected=IllegalStateException.class)
-	public void tesfe() {
-		newDynamicDSLImpl().and(eq("col1",8));
-	}
-	
-	@Test(expected=IllegalStateException.class)
-	public void tesfde() {
-		newDynamicDSLImpl().or(eq("col1",8));
-	}
-	
-	@Test(expected=IllegalStateException.class)
 	public void teefsfde() {
-		newDynamicDSLImpl().where(eq("col1",8)).where(eq("col2",6));
+		newDynamicDSLImpl().where(equal("col1",8)).where(equal("col2",6));
 	}
 	
 	@Test(expected=IllegalStateException.class)

@@ -3,19 +3,20 @@ package pl.coffeecode.coffeerepo.impl;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.util.List;
 
 import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import pl.coffeecode.coffeerepo.api.DBDriver;
 import pl.coffeecode.coffeerepo.api.QueryAttributes;
 import pl.coffeecode.coffeerepo.api.QueryResult;
+import pl.coffeecode.coffeerepo.impl.driver.DatabaseDriver;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.ImmutableTable;
@@ -23,12 +24,14 @@ import com.google.common.collect.Table;
 
 public class QueryExecutor {
 	
+	private static final int NOT_ALLOWED_TOTAL_RECORDS = -1;
+	
 	private static final Logger logger = LoggerFactory.getLogger(QueryExecutor.class);
 	
 	protected final DataSource dataSource;
-	protected final DBDriver sqlDialect;
+	protected final DatabaseDriver sqlDialect;
 
-	QueryExecutor(DataSource dataSource, DBDriver sqlDialect) {
+	QueryExecutor(DataSource dataSource, DatabaseDriver sqlDialect) {
 		checkNotNull(dataSource);
 		checkNotNull(sqlDialect);
 		this.dataSource = dataSource;
@@ -38,15 +41,19 @@ public class QueryExecutor {
 	public QueryResult getResult(QueryAttributes attributes) {
 		checkNotNull(attributes);
 		String sql = getSQL(attributes);
-		logger.debug(sql);
-		ImmutableTable<Integer,String,Object> table = executeQuery(sql);
+		List<Object> bindValues = attributes.getBindValues();
+		ImmutableTable<Integer,String,Object> table = executeQuery(sql, bindValues);
 		
-		Integer totalRecords = null;
+		int totalRecords = NOT_ALLOWED_TOTAL_RECORDS;
 		if (attributes.getNumberOfRows() != null) {
 			String countSql = getCountSQL(attributes);
-			totalRecords = executeCountQuery(countSql);
+			totalRecords = executeCountQuery(countSql, bindValues);
+		} else {
+			totalRecords = table.rowKeySet().size();
 		}
-		return new QueryResultImpl(table, sql, attributes, totalRecords);
+		QueryResult queryResult = new QueryResultImpl(table, sql, attributes, totalRecords);
+		logger.debug("{}", queryResult);
+		return queryResult;
 	}
 	
 	protected final String getSQL(QueryAttributes attributes) {
@@ -57,18 +64,19 @@ public class QueryExecutor {
 		return sqlDialect.createCountSQL(attributes);
 	}
 	
-	protected final ImmutableTable<Integer,String, Object> executeQuery(String sql) {
+	protected final ImmutableTable<Integer,String, Object> executeQuery(String sql, List<Object> bindValues) {
+		logger.debug("SQL [{}] with bind values {}", sql, bindValues);
 		Connection connection = null;
-		Statement stmt = null;
+		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		Table<Integer,String, Object> table = HashBasedTable.create();
 		
 		try {
 			connection = dataSource.getConnection();
-			stmt = connection.createStatement();
-			rs = stmt.executeQuery(sql);
+			stmt = prepareStatement(connection, sql, bindValues);
+			rs = stmt.executeQuery();
 			
-			ResultSetMetaData rsmd = rs.getMetaData(); // mozna przekazac wiecej informacji
+			ResultSetMetaData rsmd = rs.getMetaData();
 
 			int i = 0;
 			while (rs.next()) {
@@ -80,38 +88,44 @@ public class QueryExecutor {
 					}	
 				}
 			}
+			return ImmutableTable.copyOf(table);
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
-			// TODO error handling
+			throw new QueryError(sql, bindValues, e);
 		} finally {
 			try  { if (rs != null) rs.close(); } catch (SQLException e) {  } 
 			try  { if (stmt != null) stmt.close(); } catch (SQLException e) {  }
 			try  { if (connection != null) connection.close(); } catch (SQLException e) {  }
 		}
-		return ImmutableTable.copyOf(table);
+		
 	}
 	
-	protected final int executeCountQuery(String sql) {
+	protected final int executeCountQuery(String sql, List<Object> bindValues) {
+		logger.debug("SQL [{}] with bind values {}", sql, bindValues);
 		Connection connection = null;
-		Statement stmt = null;
+		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		int count = -1;
 		try {
 			connection = dataSource.getConnection();
-			stmt = connection.createStatement();
-			rs = stmt.executeQuery(sql);
+			stmt = prepareStatement(connection, sql, bindValues);
+			rs = stmt.executeQuery();
 			rs.next();
 			return rs.getInt("count(*)");
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
-			// TODO error handling
+			throw new QueryError(sql, bindValues, e);
 		} finally {
 			try  { if (rs != null) rs.close(); } catch (SQLException e) {  } 
 			try  { if (stmt != null) stmt.close(); } catch (SQLException e) {  }
 			try  { if (connection != null) connection.close(); } catch (SQLException e) {  }
 		}
-		return count; // TODO jest do dupy
 	}
 
+	private PreparedStatement prepareStatement(Connection connection, String sql, List<Object> bindValues) throws SQLException {
+		PreparedStatement stmt = connection.prepareStatement(sql);
+		int i = 1;
+		for (Object bindValue: bindValues) {
+			stmt.setObject(i++, bindValue);
+		}
+		return stmt;
+	}
 	
 }

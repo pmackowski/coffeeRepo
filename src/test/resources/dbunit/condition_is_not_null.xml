@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<dataset>
+    <TEST_USER ID="1" NAME="PAwel" LAST_NAME="Mackowski" />
+	<TEST_USER ID="2" LAST_NAME="Ackowski" />
+	<TEST_USER ID="3" NAME="apAnel" LAST_NAME="Ackowski" />
+	
+</dataset>

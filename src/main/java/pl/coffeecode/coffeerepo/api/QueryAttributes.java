@@ -16,4 +16,7 @@ public interface QueryAttributes {
 
 	Integer getPage();
 	
+	Integer getOffset();
+	
+	ImmutableList<Object> getBindValues();
 }

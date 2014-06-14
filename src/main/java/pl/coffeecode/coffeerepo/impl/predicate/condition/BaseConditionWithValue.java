@@ -1,5 +1,7 @@
 package pl.coffeecode.coffeerepo.impl.predicate.condition;
 
+import com.google.common.collect.ImmutableList;
+
 public abstract class BaseConditionWithValue extends BaseCondition {
 	
 	protected Object value;
@@ -13,10 +15,10 @@ public abstract class BaseConditionWithValue extends BaseCondition {
 		return value;
 	}
 
-	public void setValue(Object value) {
-		this.value = value;
+	public ImmutableList<Object> getBindValues() {
+		return ImmutableList.of(value);
 	}
-
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

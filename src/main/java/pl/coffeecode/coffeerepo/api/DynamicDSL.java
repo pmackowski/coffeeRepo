@@ -2,13 +2,9 @@ package pl.coffeecode.coffeerepo.api;
 
 public interface DynamicDSL extends Excutable {
 
-	DynamicDSL where(Condition condition, Condition... conditions);
+	DynamicDSL where(Condition condition);
 	
 	DynamicDSL whereIgnoreNulls(Condition... conditions);
-	
-	DynamicDSL and(Condition condition);
-	
-	DynamicDSL or(Condition condition);
 	
 	DynamicDSL orderBy(Order order, Order... orders);
 	

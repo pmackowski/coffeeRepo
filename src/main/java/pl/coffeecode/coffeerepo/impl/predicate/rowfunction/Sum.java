@@ -16,7 +16,8 @@ public class Sum implements RowFunction<Number> {
 	public Number apply(Map<String, Object> input) {
 		int sum = 0;
 		for (String column : columns) {
-			sum += (Integer) (input.get(column) == null ? 0 : input.get(column));
+			Number num = (Number) (input.get(column) == null ? 0 : input.get(column));
+			sum += num.intValue();
 		}
 		return sum;
 	}

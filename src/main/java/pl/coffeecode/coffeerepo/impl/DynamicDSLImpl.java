@@ -20,23 +20,13 @@ public class DynamicDSLImpl extends ExcutableImpl implements DynamicDSL {
 	}
 
 	@Override
-	public DynamicDSL where(Condition condition, Condition... conditions) {
-		return (DynamicDSL) newDynamicDSLImpl().addWhere(condition, conditions);
+	public DynamicDSL where(Condition condition) {
+		return (DynamicDSL) newDynamicDSLImpl().addWhere(condition);
 	}
 	
 	@Override
 	public DynamicDSL whereIgnoreNulls(Condition... conditions) {
 		return (DynamicDSL) newDynamicDSLImpl().addWhereIgnoreNulls(conditions);
-	}
-	
-	@Override
-	public DynamicDSL and(Condition condition) {
-		return (DynamicDSL) newDynamicDSLImpl().addAnd(condition);
-	}
-
-	@Override
-	public DynamicDSL or(Condition condition) {
-		return (DynamicDSL) newDynamicDSLImpl().addOr(condition);
 	}
 
 	@Override

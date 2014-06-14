@@ -10,11 +10,9 @@ import pl.coffeecode.coffeerepo.api.QueryAttributes;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
-
 public class AbstractDSL {
 	
 	private static final String TOO_MANY_INVOCATIONS_MSG = "too many invocations of method '%s'";
-	private static final String WHERE_FIRST = "Start with 'where' method";
 	
 	protected QueryExecutor delegate;
 	protected QueryAttributesImpl attributes;
@@ -36,29 +34,10 @@ public class AbstractDSL {
 		return this;
 	}
 	
-	protected AbstractDSL addWhere(Condition condition, Condition... conditions) {
+	protected AbstractDSL addWhere(Condition condition) {
 		checkInvocations(attributes.condition, "where");
 		checkNotNull(condition);
-		Condition andCondition = condition;
-		for (Condition cond : conditions) {
-			checkNotNull(cond);
-			andCondition = andCondition.and(cond);
-		}
-		attributes.condition = andCondition;
-		return this;
-	}
-	
-	protected AbstractDSL addAnd(Condition condition) {
-		checkState(attributes.condition != null, WHERE_FIRST);
-		checkNotNull(condition);
-		attributes.condition = attributes.condition.and(condition);
-		return this;
-	}
-	
-	protected AbstractDSL addOr(Condition condition) {
-		checkState(attributes.condition != null, WHERE_FIRST);
-		checkNotNull(condition);
-		attributes.condition = attributes.condition.or(condition);
+		attributes.condition = condition;
 		return this;
 	}
 	
@@ -142,6 +121,11 @@ public class AbstractDSL {
 		}
 		
 		@Override
+		public ImmutableList<Object> getBindValues() {
+			return condition == null ? ImmutableList.of() : condition.getBindValues();
+		}
+		
+		@Override
 		public ImmutableList<Order> getOrders() {
 			return orders;
 		}
@@ -156,15 +140,83 @@ public class AbstractDSL {
 			return page;
 		}
 		
+		@Override
+		public Integer getOffset() {
+			if (numberOfRows == null || page == null) {
+				return null;
+			}
+			return numberOfRows * (page - 1);
+		}
+		
 		public QueryAttributesImpl clone() {
 			return new QueryAttributesImpl(columns, viewName, numberOfRows, page, condition, orders);
 		}
 		
 		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result
+					+ ((columns == null) ? 0 : columns.hashCode());
+			result = prime * result
+					+ ((condition == null) ? 0 : condition.hashCode());
+			result = prime * result
+					+ ((numberOfRows == null) ? 0 : numberOfRows.hashCode());
+			result = prime * result
+					+ ((orders == null) ? 0 : orders.hashCode());
+			result = prime * result + ((page == null) ? 0 : page.hashCode());
+			result = prime * result
+					+ ((viewName == null) ? 0 : viewName.hashCode());
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			QueryAttributesImpl other = (QueryAttributesImpl) obj;
+			if (columns == null) {
+				if (other.columns != null)
+					return false;
+			} else if (!columns.equals(other.columns))
+				return false;
+			if (condition == null) {
+				if (other.condition != null)
+					return false;
+			} else if (!condition.equals(other.condition))
+				return false;
+			if (numberOfRows == null) {
+				if (other.numberOfRows != null)
+					return false;
+			} else if (!numberOfRows.equals(other.numberOfRows))
+				return false;
+			if (orders == null) {
+				if (other.orders != null)
+					return false;
+			} else if (!orders.equals(other.orders))
+				return false;
+			if (page == null) {
+				if (other.page != null)
+					return false;
+			} else if (!page.equals(other.page))
+				return false;
+			if (viewName == null) {
+				if (other.viewName != null)
+					return false;
+			} else if (!viewName.equals(other.viewName))
+				return false;
+			return true;
+		}
+
+		@Override
 		public String toString() {
 			return "QueryAttributesImpl [columns=" + columns + ", viewName="
 					+ viewName + ", numberOfRows=" + numberOfRows + ", page="
-					+ page + ", condition=" + condition + ", orders="
+					+ page + ", condition=" + condition + ", bindValues=" + getBindValues() + ", orders="
 					+ orders + "]";
 		}
 

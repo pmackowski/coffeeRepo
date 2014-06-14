@@ -1,5 +1,6 @@
 package pl.coffeecode.coffeerepo.impl.predicate;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import pl.coffeecode.coffeerepo.api.Order;
 
 public class OrderImpl implements Order {
@@ -8,10 +9,17 @@ public class OrderImpl implements Order {
 	private final SortOrder sortOrder;
 	
 	public OrderImpl(String column, SortOrder sortOrder) {
+		checkNotNull(column);
+		checkNotNull(sortOrder);
+		//checkArgument(isSafe(column));
 		this.column = column;
 		this.sortOrder = sortOrder;
 	}
 	
+	/*private boolean isSafe(String column) {
+		return column.;
+	}*/
+
 	public String getColumn() {
 		return column;
 	}

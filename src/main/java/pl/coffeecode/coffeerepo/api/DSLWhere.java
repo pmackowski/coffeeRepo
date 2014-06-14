@@ -1,7 +1,7 @@
 package pl.coffeecode.coffeerepo.api;
 
-public interface DSLWhere extends DSLCondition {
+public interface DSLWhere extends DSLOrderBy {
 	
-	DSLCondition where(Condition condition, Condition... conditions);
+	DSLOrderBy where(Condition condition);
 
 }

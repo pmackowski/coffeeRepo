@@ -4,12 +4,20 @@ import com.google.common.collect.Table;
 
 public interface QueryResult {
 	
+	/**
+	 * 
+	 * @return SQL used for java.sql.PreparedStatement (with question marks)
+	 */
 	String sql();
 	
 	QueryAttributes attributes();
 	
 	Table<Integer,String,Object> items();
 	
-	Integer getTotalRecords();
+	/**
+	 * 
+	 * @return if limit clause is used then total number, otherwise number of records returned by the query
+	 */
+	int getTotalRecords();
 	
 }
