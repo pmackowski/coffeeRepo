@@ -58,6 +58,14 @@ public abstract class DBUnitTest {
         return Configuration.availableDatabases;
     }
     
+    public Object[] oracle() {
+    	return new SQLDialectDatasource[] {Configuration.OracleDatabase};
+    }
+    
+    public Object[] h2() {
+        return new SQLDialectDatasource[] {Configuration.H2Database};
+    }
+    
 	private void cleanlyInsert(SQLDialectDatasource dialectDatasource) throws Exception {
 		IDatabaseTester databaseTester = new JdbcDatabaseTester(dialectDatasource.jdbcDriver(),
 				dialectDatasource.jdbcUrl(), dialectDatasource.jdbcUser(), dialectDatasource.jdbcPassword());

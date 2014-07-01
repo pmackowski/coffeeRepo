@@ -29,19 +29,19 @@ public class QueryExecutor {
 	private static final Logger logger = LoggerFactory.getLogger(QueryExecutor.class);
 	
 	protected final DataSource dataSource;
-	protected final DatabaseDriver sqlDialect;
+	protected final DatabaseDriver databaseDriver;
 
-	QueryExecutor(DataSource dataSource, DatabaseDriver sqlDialect) {
+	QueryExecutor(DataSource dataSource, DatabaseDriver databaseDriver) {
 		checkNotNull(dataSource);
-		checkNotNull(sqlDialect);
+		checkNotNull(databaseDriver);
 		this.dataSource = dataSource;
-		this.sqlDialect = sqlDialect;
+		this.databaseDriver = databaseDriver;
 	}
 
 	public QueryResult getResult(QueryAttributes attributes) {
 		checkNotNull(attributes);
 		String sql = getSQL(attributes);
-		List<Object> bindValues = attributes.getBindValues();
+		List<Object> bindValues = databaseDriver.convertBindValues(attributes.getBindValues());
 		ImmutableTable<Integer,String,Object> table = executeQuery(sql, bindValues);
 		
 		int totalRecords = NOT_ALLOWED_TOTAL_RECORDS;
@@ -57,11 +57,11 @@ public class QueryExecutor {
 	}
 	
 	protected final String getSQL(QueryAttributes attributes) {
-		return sqlDialect.createSQL(attributes);
+		return databaseDriver.createSQL(attributes);
 	}
 	
 	protected final String getCountSQL(QueryAttributes attributes) {
-		return sqlDialect.createCountSQL(attributes);
+		return databaseDriver.createCountSQL(attributes);
 	}
 	
 	protected final ImmutableTable<Integer,String, Object> executeQuery(String sql, List<Object> bindValues) {

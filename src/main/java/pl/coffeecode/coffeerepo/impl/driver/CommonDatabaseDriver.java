@@ -1,5 +1,7 @@
 package pl.coffeecode.coffeerepo.impl.driver;
 
+import java.util.List;
+
 import pl.coffeecode.coffeerepo.api.Order;
 import pl.coffeecode.coffeerepo.api.QueryAttributes;
 
@@ -74,6 +76,11 @@ public abstract class CommonDatabaseDriver implements DatabaseDriver {
 			.append(whereClause(attributes))
 			.toString();
 		
+	}
+	
+	@Override
+	public List<Object> convertBindValues(List<Object> bindValues) {
+		return bindValues;
 	}
 	
 }

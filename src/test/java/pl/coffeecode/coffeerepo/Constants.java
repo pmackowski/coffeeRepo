@@ -12,5 +12,5 @@ public class Constants {
 	public static final String C_BONUS = "BONUS";
 	public static final String C_LAST_LOGIN = "LAST_LOGIN";
 	public static final String C_DATE_OF_BIRTH = "DATE_OF_BIRTH";
-	
+	public static final String C_HAS_CAR = "HAS_CAR";
 }

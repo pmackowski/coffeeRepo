@@ -1,5 +1,11 @@
 package pl.coffeecode.coffeerepo.impl.driver.oracle;
 
+import java.util.Date;
+import java.util.List;
+
+import com.google.common.base.Function;
+import com.google.common.collect.FluentIterable;
+
 import pl.coffeecode.coffeerepo.api.QueryAttributes;
 import pl.coffeecode.coffeerepo.impl.driver.CommonDatabaseDriver;
 import pl.coffeecode.coffeerepo.impl.driver.ConditionVisitor;
@@ -39,5 +45,32 @@ public class OracleDriver extends CommonDatabaseDriver implements DatabaseDriver
 	protected ConditionVisitor getConditionVisitor() {
 		return new OracleConditionVisitor();
 	}
+	
+	@Override
+	public List<Object> convertBindValues(List<Object> bindValues) {
+		return FluentIterable.from(bindValues).transform(new Function<Object,Object>() {
 
+			@Override
+			public Object apply(Object input) {
+				if (input instanceof Boolean) {
+					return convert((Boolean) input);
+				} else if (input instanceof Date) {
+					return new java.sql.Date(((Date) input).getTime()); 
+				}
+				return convert(input);
+			}
+			
+		}).toList();
+	}
+	
+	private Object convert(Object input) {
+		return input;
+	}
+	
+	private Integer convert(Boolean input) {
+		if (input == null) {
+			return null;
+		}
+		return input == true ? 1 : 0;
+	}
 }

@@ -85,7 +85,7 @@ public class ConditionGreaterTest extends DBUnitTest {
 				
 				.select(C_DATE_OF_BIRTH, C_AGE)
 				.from(VIEW_NAME)
-				.where(greater(C_DATE_OF_BIRTH, new java.sql.Date(cal.getTime().getTime()))) // necessary for Oracle
+				.where(greater(C_DATE_OF_BIRTH, cal.getTime()))
 				.getResult();
 		
 		assertThat(result.getTotalRecords()).isEqualTo(5);

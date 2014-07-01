@@ -1,5 +1,7 @@
 package pl.coffeecode.coffeerepo.api;
 
+import java.util.List;
+
 import pl.coffeecode.coffeerepo.impl.driver.DatabaseDriver;
 import pl.coffeecode.coffeerepo.impl.driver.h2.H2Driver;
 import pl.coffeecode.coffeerepo.impl.driver.oracle.OracleDriver;
@@ -22,6 +24,11 @@ public enum SQLDialect implements DatabaseDriver {
 	@Override
 	public String createCountSQL(QueryAttributes attributes) {
 		return driver.createCountSQL(attributes);
+	}
+
+	@Override
+	public List<Object> convertBindValues(List<Object> bindValues) {
+		return driver.convertBindValues(bindValues);
 	}
 
 }

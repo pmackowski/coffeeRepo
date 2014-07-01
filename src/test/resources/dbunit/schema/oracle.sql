@@ -8,5 +8,6 @@ create table TEST_USER (
   SALARY  NUMBER(19,0),
   BONUS  NUMBER(19,0),
   LAST_LOGIN timestamp,
-  DATE_OF_BIRTH date
+  DATE_OF_BIRTH date,
+  HAS_CAR NUMBER(1,0)
 );
