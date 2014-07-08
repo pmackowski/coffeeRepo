@@ -48,8 +48,8 @@ public class ConditionEqualTest extends DBUnitTest {
 	
 	}
 	
-	@Test
 	@Ignore
+	@Test
 	@Parameters(method = "databases")
 	public void should_be_equal_to_boolean_true(SQLDialectDatasource dialectDatasource) {
 		prepare(dialectDatasource);
@@ -65,15 +65,15 @@ public class ConditionEqualTest extends DBUnitTest {
 
 			@Override
 			public boolean matches(Map<String,Object> value) {
-				return (boolean) value.get(C_HAS_CAR) == true;
+				return (Boolean) value.get(C_HAS_CAR) == true;
 			}
 			
 		});
 	
 	}
 	
-	@Test
 	@Ignore
+	@Test
 	@Parameters(method = "databases")
 	public void should_be_equal_to_boolean_false(SQLDialectDatasource dialectDatasource) {
 		prepare(dialectDatasource);
@@ -89,13 +89,13 @@ public class ConditionEqualTest extends DBUnitTest {
 
 			@Override
 			public boolean matches(Map<String,Object> value) {
-				return (boolean) value.get(C_HAS_CAR);
+				return (Boolean) value.get(C_HAS_CAR);
 			}
 			
 		});
 	
 	}
-	
+
 	@Override
 	protected String getDatasetFilePath() {
 		return DATASET_FILE;

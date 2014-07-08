@@ -1,20 +1,21 @@
 package pl.coffeecode.coffeerepo.api;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import com.google.common.collect.ImmutableList;
-
 import pl.coffeecode.coffeerepo.impl.predicate.ConditionExpression;
+import pl.coffeecode.coffeerepo.impl.predicate.ConditionExpression.Operator;
 import pl.coffeecode.coffeerepo.impl.predicate.OrderImpl;
 import pl.coffeecode.coffeerepo.impl.predicate.SortOrder;
-import pl.coffeecode.coffeerepo.impl.predicate.ConditionExpression.Operator;
 import pl.coffeecode.coffeerepo.impl.predicate.cellfunction.FormatDate;
 import pl.coffeecode.coffeerepo.impl.predicate.cellfunction.LowerCase;
 import pl.coffeecode.coffeerepo.impl.predicate.cellfunction.Money;
 import pl.coffeecode.coffeerepo.impl.predicate.cellfunction.UpperCase;
 import pl.coffeecode.coffeerepo.impl.predicate.condition.ConditionBeginsWith;
+import pl.coffeecode.coffeerepo.impl.predicate.condition.ConditionContains;
 import pl.coffeecode.coffeerepo.impl.predicate.condition.ConditionDoesNotBeginWith;
 import pl.coffeecode.coffeerepo.impl.predicate.condition.ConditionDoesNotContain;
 import pl.coffeecode.coffeerepo.impl.predicate.condition.ConditionEqual;
@@ -22,41 +23,39 @@ import pl.coffeecode.coffeerepo.impl.predicate.condition.ConditionGreater;
 import pl.coffeecode.coffeerepo.impl.predicate.condition.ConditionGreaterOrEqual;
 import pl.coffeecode.coffeerepo.impl.predicate.condition.ConditionIsNotNull;
 import pl.coffeecode.coffeerepo.impl.predicate.condition.ConditionIsNull;
-import pl.coffeecode.coffeerepo.impl.predicate.condition.ConditionLessOrEqual;
-import pl.coffeecode.coffeerepo.impl.predicate.condition.ConditionContains;
-import pl.coffeecode.coffeerepo.impl.predicate.condition.ConditionNotEqual;
 import pl.coffeecode.coffeerepo.impl.predicate.condition.ConditionLess;
+import pl.coffeecode.coffeerepo.impl.predicate.condition.ConditionLessOrEqual;
+import pl.coffeecode.coffeerepo.impl.predicate.condition.ConditionNotEqual;
 import pl.coffeecode.coffeerepo.impl.predicate.rowfunction.Pattern;
 import pl.coffeecode.coffeerepo.impl.predicate.rowfunction.Sum;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
+
 public class Predicate {
 	
+	// ConditionExpression
 	public static Condition or(Condition... conditions) {	
-		return new ConditionExpression(Operator.OR, ImmutableList.copyOf(conditions));
+		return or(ImmutableList.copyOf(conditions));
 	}
 	
 	public static Condition and(Condition... conditions) {	
-		return new ConditionExpression(Operator.AND, ImmutableList.copyOf(conditions));
+		return and(ImmutableList.copyOf(conditions));
 	}
 	
-	public static Condition or(List<Condition> conditions) {	
-		if (conditions.size() == 1) { // TODO
-			return conditions.get(0);
-		}
-		return new ConditionExpression(Operator.OR, ImmutableList.copyOf(conditions));
+	public static Condition or(List<Condition> conditions) {
+		return getCondition(Operator.OR, conditions);
 	}
 	
 	public static Condition and(List<Condition> conditions) {
-		if (conditions.size() == 1) { // TODO
-			return conditions.get(0);
-		}
-		return new ConditionExpression(Operator.AND, ImmutableList.copyOf(conditions));
+		return getCondition(Operator.AND, conditions);
 	}
 	
 	public static Condition not(Condition condition) {
 		return new ConditionExpression(Operator.NOT, ImmutableList.of(condition));
 	}
 
+	// BaseCondition
 	public static Condition equal(String column, Object value) {
 		return new ConditionEqual(column, value);
 	}
@@ -151,5 +150,13 @@ public class Predicate {
 	
 	public static RowFunction<Number> sum(String... columns) {
 		return new Sum(columns);
+	}
+	
+	private static Condition getCondition(Operator operator, List<Condition> conditions) {
+		checkArgument(! Iterables.isEmpty(conditions));
+		if (Iterables.size(conditions) == 1) { 
+			return Iterables.getOnlyElement(conditions);
+		}
+		return new ConditionExpression(operator, ImmutableList.copyOf(conditions));
 	}
 }

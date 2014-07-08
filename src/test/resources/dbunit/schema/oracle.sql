@@ -1,4 +1,4 @@
-drop table TEST_USER;
+drop table TEST_USER cascade constraints;
 
 create table TEST_USER (
   ID NUMBER(19,0) primary key,

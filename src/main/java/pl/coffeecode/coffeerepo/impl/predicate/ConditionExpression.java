@@ -12,8 +12,8 @@ import com.google.common.collect.Lists;
 
 public class ConditionExpression implements Condition {
 
-	private Operator operator;
-	private ImmutableList<Condition> conditions;
+	protected Operator operator;
+	protected ImmutableList<Condition> conditions;
 	
 	protected ConditionExpression() {}
 	
