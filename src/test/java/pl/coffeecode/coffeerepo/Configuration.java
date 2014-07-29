@@ -19,7 +19,7 @@ public class Configuration {
 			new SQLDialectDatasourceImpl(
 					SQLDialect.Oracle,
 					SCHEMA_DIRECTORY + "oracle.sql",
-					oracle.jdbc.driver.OracleDriver.class.getName(),
+					"oracle.jdbc.driver.OracleDriver",
 					"jdbc:oracle:thin:@localhost:1521:xe",
 					"hr","hr");
 	
