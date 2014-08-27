@@ -36,7 +36,7 @@ public class QueryCacheTest extends DBUnitTest {
 	public void should_put_once_the_same_query_into_cache(SQLDialectDatasource dialectDatasource) {
 		// given
 		prepare(dialectDatasource);
-		DSL cachedDsl = ViewRepository.dsl(dialectDatasource.dataSource(), dialectDatasource.dialect(), cache);
+		DSL cachedDsl = ViewRepository.dsl(dialectDatasource.dataSource(), cache);
 		// when && then	
 		assertThat(cache.size()).isEqualTo(0);
 		cachedDsl.select(C_NAME,C_LAST_NAME).from(VIEW_NAME).getResult();
@@ -50,7 +50,7 @@ public class QueryCacheTest extends DBUnitTest {
 	public void should_put_different_bindings_into_different_caches(SQLDialectDatasource dialectDatasource) {
 		// given
 		prepare(dialectDatasource);
-		DSL cachedDsl = ViewRepository.dsl(dialectDatasource.dataSource(), dialectDatasource.dialect(), cache);
+		DSL cachedDsl = ViewRepository.dsl(dialectDatasource.dataSource(), cache);
 		// when && then	
 		assertThat(cache.size()).isEqualTo(0);
 		cachedDsl.select(C_LAST_NAME).from(VIEW_NAME).where(equal(C_NAME, "Pawel")).getResult();
@@ -67,7 +67,7 @@ public class QueryCacheTest extends DBUnitTest {
 	public void should_put_different_order_by_into_different_caches(SQLDialectDatasource dialectDatasource) {
 		// given
 		prepare(dialectDatasource);
-		DSL cachedDsl = ViewRepository.dsl(dialectDatasource.dataSource(), dialectDatasource.dialect(), cache);
+		DSL cachedDsl = ViewRepository.dsl(dialectDatasource.dataSource(), cache);
 		// when && then	
 		assertThat(cache.size()).isEqualTo(0);
 		cachedDsl.select(C_LAST_NAME).from(VIEW_NAME).orderBy(asc(C_LAST_NAME)).getResult();
@@ -83,7 +83,7 @@ public class QueryCacheTest extends DBUnitTest {
 	public void should_put_different_limit_into_different_caches(SQLDialectDatasource dialectDatasource) {
 		// given
 		prepare(dialectDatasource);
-		DSL cachedDsl = ViewRepository.dsl(dialectDatasource.dataSource(), dialectDatasource.dialect(), cache);
+		DSL cachedDsl = ViewRepository.dsl(dialectDatasource.dataSource(), cache);
 		// when && then	
 		assertThat(cache.size()).isEqualTo(0);
 		cachedDsl.select(C_LAST_NAME).from(VIEW_NAME).limit(3,2).getResult();

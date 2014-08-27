@@ -8,9 +8,7 @@ import javax.sql.DataSource;
 import org.junit.Before;
 import org.junit.Test;
 
-import pl.coffeecode.coffeerepo.api.SQLDialect;
-import pl.coffeecode.coffeerepo.impl.DynamicDSLFromImpl;
-import pl.coffeecode.coffeerepo.impl.DynamicDSLSelectImpl;
+import pl.coffeecode.coffeerepo.impl.driver.h2.H2Driver;
 
 public class DynamicDSLSelectImplTest {
 	
@@ -19,9 +17,8 @@ public class DynamicDSLSelectImplTest {
 	@Before
 	public void autowire() {
 		DataSource dataSource = mock(DataSource.class);
-		SQLDialect dialect = SQLDialect.H2;
 		
-		dsl = new DynamicDSLSelectImpl(dataSource, dialect);
+		dsl = new DynamicDSLSelectImpl(dataSource, new H2Driver());
 	}
 	
 	@Test

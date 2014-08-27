@@ -1,6 +1,5 @@
 package pl.coffeecode.coffeerepo;
 
-import pl.coffeecode.coffeerepo.api.SQLDialect;
 
 public class Configuration {
 	
@@ -9,15 +8,15 @@ public class Configuration {
 	
 	public static final SQLDialectDatasource H2Database = 
 			new SQLDialectDatasourceImpl(
-					SQLDialect.H2,
+					"H2",
 					SCHEMA_DIRECTORY + "h2.sql",
-					org.h2.Driver.class.getName(),
+					"org.h2.Driver",
 					"jdbc:h2:mem:test;DB_CLOSE_DELAY=-1",
 					"sa","");
 	
 	public static final SQLDialectDatasource OracleDatabase = 
 			new SQLDialectDatasourceImpl(
-					SQLDialect.Oracle,
+					"Oracle",
 					SCHEMA_DIRECTORY + "oracle.sql",
 					"oracle.jdbc.driver.OracleDriver",
 					"jdbc:oracle:thin:@localhost:1521:xe",
@@ -26,5 +25,5 @@ public class Configuration {
 	public static final SQLDialectDatasource[] availableDatabases = {
 		H2Database, OracleDatabase 
 	};
-	
+
 }

@@ -45,8 +45,8 @@ public abstract class DBUnitTest {
 	}
 	
     public void prepare(SQLDialectDatasource dialectDatasource) {
-		dsl = ViewRepository.dsl(dialectDatasource.dataSource(), dialectDatasource.dialect());
-		dynamicDsl = ViewRepository.dynamicDsl(dialectDatasource.dataSource(), dialectDatasource.dialect());
+		dsl = ViewRepository.dsl(dialectDatasource.dataSource());
+		dynamicDsl = ViewRepository.dynamicDsl(dialectDatasource.dataSource());
 		try {
 			cleanlyInsert(dialectDatasource);
 		} catch (Exception exc) {

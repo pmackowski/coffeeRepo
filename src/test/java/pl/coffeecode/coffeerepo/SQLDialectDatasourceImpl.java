@@ -4,23 +4,22 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
-import org.h2.jdbcx.JdbcDataSource;
-
-import pl.coffeecode.coffeerepo.api.SQLDialect;
 import oracle.jdbc.pool.OracleDataSource;
+
+import org.h2.jdbcx.JdbcDataSource;
 
 public class SQLDialectDatasourceImpl implements SQLDialectDatasource {
 	
-	private SQLDialect dialect;
+	private String db;
 	private String schemaScript;
 	private String jdbcDriver;
 	private String jdbcUrl;
 	private String jdbcUser;
 	private String jdbcPassword;
 	
-	public SQLDialectDatasourceImpl(SQLDialect dialect, String schemaScript, String jdbcDriver,
+	public SQLDialectDatasourceImpl(String db, String schemaScript, String jdbcDriver,
 			String jdbcUrl, String jdbcUser, String jdbcPassword) {
-		this.dialect = dialect;
+		this.db = db;
 		this.schemaScript = schemaScript;
 		this.jdbcDriver = jdbcDriver;
 		this.jdbcUrl = jdbcUrl;
@@ -56,13 +55,13 @@ public class SQLDialectDatasourceImpl implements SQLDialectDatasource {
 	@Override
 	public DataSource dataSource() { // TODO
 		try {
-			if (dialect == SQLDialect.H2) {
+			if ("H2".equals(db)) {
 				JdbcDataSource jdbcDataSource = new JdbcDataSource();
 				jdbcDataSource.setURL(jdbcUrl);
 				jdbcDataSource.setUser(jdbcUser);
 				jdbcDataSource.setPassword(jdbcPassword);
 				return jdbcDataSource;
-			} else if (dialect == SQLDialect.Oracle) {
+			} else if ("Oracle".equals(db)) {
 				OracleDataSource oracleDS = new OracleDataSource();
 	            oracleDS.setURL(jdbcUrl);
 	            oracleDS.setUser(jdbcUser);
@@ -77,16 +76,16 @@ public class SQLDialectDatasourceImpl implements SQLDialectDatasource {
 	}
 
 	@Override
-	public SQLDialect dialect() {
-		return dialect;
+	public String toString() {
+		return "SQLDialectDatasourceImpl [" 
+				+ "schemaScript=" + schemaScript + ", jdbcDriver="
+				+ jdbcDriver + ", jdbcUrl=" + jdbcUrl + ", jdbcUser="
+				+ jdbcUser + ", jdbcPassword=" + jdbcPassword + "]";
 	}
 
 	@Override
-	public String toString() {
-		return "SQLDialectDatasourceImpl [dialect=" + dialect
-				+ ", schemaScript=" + schemaScript + ", jdbcDriver="
-				+ jdbcDriver + ", jdbcUrl=" + jdbcUrl + ", jdbcUser="
-				+ jdbcUser + ", jdbcPassword=" + jdbcPassword + "]";
+	public String db() {
+		return db;
 	}
 	
 }
