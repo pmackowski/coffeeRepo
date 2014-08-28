@@ -38,128 +38,131 @@ public class Predicate {
     }
 
     // ConditionExpression
-	public static Condition or(Condition... conditions) {	
-		return or(ImmutableList.copyOf(conditions));
-	}
-	
-	public static Condition and(Condition... conditions) {	
-		return and(ImmutableList.copyOf(conditions));
-	}
-	
-	public static Condition or(List<Condition> conditions) {
-		return getCondition(Operator.OR, conditions);
-	}
-	
-	public static Condition and(List<Condition> conditions) {
-		return getCondition(Operator.AND, conditions);
-	}
-	
-	public static Condition not(Condition condition) {
-		return new ConditionExpression(Operator.NOT, ImmutableList.of(condition));
-	}
+    public static Condition or(Condition... conditions) {
+        return or(ImmutableList.copyOf(conditions));
+    }
 
-	// BaseCondition
-	public static Condition equal(String column, Object value) {
-		return new ConditionEqual(column, value);
-	}
-		
-	public static Condition notEqual(String column, Object value) {
-		return new ConditionNotEqual(column, value);
-	}
-	
-	public static Condition less(String column, Object value) {
-		return new ConditionLess(column, value);
-	}
-	
-	public static Condition lessOrEqual(String column, Object value) {
-		return new ConditionLessOrEqual(column, value);
-	}
-	
-	public static Condition greater(String column, Object value) {
-		return new ConditionGreater(column, value);
-	}
-	
-	/**
-	 * ignorecase for strings
-	 * @param column
-	 * @param value
-	 * @return
-	 */
-	public static Condition greaterOrEqual(String column, Object value) {
-		return new ConditionGreaterOrEqual(column, value);
-	}
-	
-	public static Condition beginsWith(String column, String value) {
-		return new ConditionBeginsWith(column, value);
-	}
-	
-	public static Condition doesNotBeginWith(String column, String value) {
-		return new ConditionDoesNotBeginWith(column, value);
-	}
-	
-	public static Condition contains(String column, String value) {
-		return new ConditionContains(column, value);
-	}
-	
-	public static Condition doesNotContain(String column, String value) {
-		return new ConditionDoesNotContain(column, value);
-	}
-	
-	public static Condition isNull(String column) {
-		return new ConditionIsNull(column);
-	}
-	
-	public static Condition isNotNull(String column) {
-		return new ConditionIsNotNull(column);
-	}
-	
-	/**
-	 * sort in ascending order, nulls last
-	 * @param column
-	 * @return
-	 */
-	public static Order asc(String column) {
-		return new OrderImpl(column, SortOrder.ASC);
-	}
-	
-	/**
-	 * sort in descending order, nulls last
-	 * @param column
-	 * @return
-	 */
-	public static Order desc(String column) {
-		return new OrderImpl(column, SortOrder.DESC);
-	}
+    public static Condition and(Condition... conditions) {
+        return and(ImmutableList.copyOf(conditions));
+    }
 
-	public static CellFunction<Object,String> lowerCase() {
-		return new LowerCase();
-	}
-	
-	public static CellFunction<Object,String> upperCase() {
-		return new UpperCase();
-	}
-	
-	public static CellFunction<Date,String> formatDate(String format) {
-		return new FormatDate(format);
-	}
-	
-	public static CellFunction<Number,String> money(Locale locale) {
-		return new Money(locale);
-	}
-	
-	public static RowFunction<String> pattern(String pattern, String... columns) {
-		return new Pattern(pattern, columns);
-	}
-	
-	public static RowFunction<Number> sum(String... columns) {
-		return new Sum(columns);
-	}
-	
-	private static Condition getCondition(Operator operator, List<Condition> conditions) {
-		checkArgument(! Iterables.isEmpty(conditions));
-		if (Iterables.size(conditions) == 1) { 
-			return Iterables.getOnlyElement(conditions);
-		}
-		return new ConditionExpression(operator, ImmutableList.copyOf(conditions));
-	}
+    public static Condition or(List<Condition> conditions) {
+        return getCondition(Operator.OR, conditions);
+    }
+
+    public static Condition and(List<Condition> conditions) {
+        return getCondition(Operator.AND, conditions);
+    }
+
+    public static Condition not(Condition condition) {
+        return new ConditionExpression(Operator.NOT, ImmutableList.of(condition));
+    }
+
+    // BaseCondition
+    public static Condition equal(String column, Object value) {
+        return new ConditionEqual(column, value);
+    }
+
+    public static Condition notEqual(String column, Object value) {
+        return new ConditionNotEqual(column, value);
+    }
+
+    public static Condition less(String column, Object value) {
+        return new ConditionLess(column, value);
+    }
+
+    public static Condition lessOrEqual(String column, Object value) {
+        return new ConditionLessOrEqual(column, value);
+    }
+
+    public static Condition greater(String column, Object value) {
+        return new ConditionGreater(column, value);
+    }
+
+    /**
+     * ignorecase for strings
+     *
+     * @param column
+     * @param value
+     * @return
+     */
+    public static Condition greaterOrEqual(String column, Object value) {
+        return new ConditionGreaterOrEqual(column, value);
+    }
+
+    public static Condition beginsWith(String column, String value) {
+        return new ConditionBeginsWith(column, value);
+    }
+
+    public static Condition doesNotBeginWith(String column, String value) {
+        return new ConditionDoesNotBeginWith(column, value);
+    }
+
+    public static Condition contains(String column, String value) {
+        return new ConditionContains(column, value);
+    }
+
+    public static Condition doesNotContain(String column, String value) {
+        return new ConditionDoesNotContain(column, value);
+    }
+
+    public static Condition isNull(String column) {
+        return new ConditionIsNull(column);
+    }
+
+    public static Condition isNotNull(String column) {
+        return new ConditionIsNotNull(column);
+    }
+
+    /**
+     * sort in ascending order, nulls last
+     *
+     * @param column
+     * @return
+     */
+    public static Order asc(String column) {
+        return new OrderImpl(column, SortOrder.ASC);
+    }
+
+    /**
+     * sort in descending order, nulls last
+     *
+     * @param column
+     * @return
+     */
+    public static Order desc(String column) {
+        return new OrderImpl(column, SortOrder.DESC);
+    }
+
+    public static CellFunction<Object, String> lowerCase() {
+        return new LowerCase();
+    }
+
+    public static CellFunction<Object, String> upperCase() {
+        return new UpperCase();
+    }
+
+    public static CellFunction<Date, String> formatDate(String format) {
+        return new FormatDate(format);
+    }
+
+    public static CellFunction<Number, String> money(Locale locale) {
+        return new Money(locale);
+    }
+
+    public static RowFunction<String> pattern(String pattern, String... columns) {
+        return new Pattern(pattern, columns);
+    }
+
+    public static RowFunction<Number> sum(String... columns) {
+        return new Sum(columns);
+    }
+
+    private static Condition getCondition(Operator operator, List<Condition> conditions) {
+        checkArgument(!Iterables.isEmpty(conditions));
+        if (Iterables.size(conditions) == 1) {
+            return Iterables.getOnlyElement(conditions);
+        }
+        return new ConditionExpression(operator, ImmutableList.copyOf(conditions));
+    }
 }

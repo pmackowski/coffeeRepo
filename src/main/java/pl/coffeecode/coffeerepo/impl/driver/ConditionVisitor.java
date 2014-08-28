@@ -14,29 +14,29 @@ import pl.coffeecode.coffeerepo.impl.predicate.condition.ConditionLessOrEqual;
 import pl.coffeecode.coffeerepo.impl.predicate.condition.ConditionNotEqual;
 
 public interface ConditionVisitor {
-	
-	String toSQL(ConditionBeginsWith condition);
 
-	String toSQL(ConditionContains conditionContains);
+    String toSQL(ConditionBeginsWith condition);
 
-	String toSQL(ConditionDoesNotBeginWith conditionDoesNotBeginWith);
+    String toSQL(ConditionContains conditionContains);
 
-	String toSQL(ConditionDoesNotContain conditionDoesNotContain);
+    String toSQL(ConditionDoesNotBeginWith conditionDoesNotBeginWith);
 
-	String toSQL(ConditionEqual conditionEqual);
+    String toSQL(ConditionDoesNotContain conditionDoesNotContain);
 
-	String toSQL(ConditionGreater conditionGreater);
+    String toSQL(ConditionEqual conditionEqual);
 
-	String toSQL(ConditionGreaterOrEqual conditionGreaterOrEqual);
+    String toSQL(ConditionGreater conditionGreater);
 
-	String toSQL(ConditionIsNotNull conditionIsNotNull);
+    String toSQL(ConditionGreaterOrEqual conditionGreaterOrEqual);
 
-	String toSQL(ConditionIsNull conditionIsNull);
+    String toSQL(ConditionIsNotNull conditionIsNotNull);
 
-	String toSQL(ConditionLess conditionLess);
+    String toSQL(ConditionIsNull conditionIsNull);
 
-	String toSQL(ConditionLessOrEqual conditionLessOrEqual);
+    String toSQL(ConditionLess conditionLess);
 
-	String toSQL(ConditionNotEqual conditionNotEqual);
-	
+    String toSQL(ConditionLessOrEqual conditionLessOrEqual);
+
+    String toSQL(ConditionNotEqual conditionNotEqual);
+
 }

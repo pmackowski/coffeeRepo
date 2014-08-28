@@ -5,17 +5,17 @@ import java.util.Date;
 
 import pl.coffeecode.coffeerepo.api.CellFunction;
 
-public class FormatDate implements CellFunction<Date,String> {
-	
-	private final String format;
+public class FormatDate implements CellFunction<Date, String> {
 
-	public FormatDate(String format) {
-		this.format = format;
-	}
-	
-	@Override
-	public String apply(Date input) {
-		SimpleDateFormat dateFormat = new SimpleDateFormat(format);
-		return dateFormat.format( input );
-	}
+    private final String format;
+
+    public FormatDate(String format) {
+        this.format = format;
+    }
+
+    @Override
+    public String apply(Date input) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(format);
+        return dateFormat.format(input);
+    }
 }

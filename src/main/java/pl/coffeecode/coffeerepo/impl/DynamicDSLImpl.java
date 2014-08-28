@@ -14,78 +14,78 @@ import pl.coffeecode.coffeerepo.api.Order;
 import pl.coffeecode.coffeerepo.api.Predicate;
 
 public class DynamicDSLImpl extends ExcutableImpl implements DynamicDSL {
-	
-	public DynamicDSLImpl(QueryExecutor delegate, QueryAttributesImpl attributes) {
-		super(delegate, attributes);
-	}
 
-	@Override
-	public DynamicDSL where(Condition condition) {
-		return (DynamicDSL) newDynamicDSLImpl().addWhere(condition);
-	}
-	
-	@Override
-	public DynamicDSL whereIgnoreNulls(Condition... conditions) {
-		return (DynamicDSL) newDynamicDSLImpl().addWhereIgnoreNulls(conditions);
-	}
+    public DynamicDSLImpl(QueryExecutor delegate, QueryAttributesImpl attributes) {
+        super(delegate, attributes);
+    }
 
-	@Override
-	public DynamicDSL orderBy(Order order, Order... orders) {
-		return (DynamicDSL) newDynamicDSLImpl().addOrderBy(order, orders);
-	}
+    @Override
+    public DynamicDSL where(Condition condition) {
+        return (DynamicDSL) newDynamicDSLImpl().addWhere(condition);
+    }
 
-	@Override
-	public DynamicDSL appendOrderBy(Order... orders) {
-		return (DynamicDSL) newDynamicDSLImpl().addAppendOrderBy(orders);
-	}
-	
-	@Override
-	public DynamicDSL appendOrderByIgnoreNulls(Order... orders) {
-		return (DynamicDSL) newDynamicDSLImpl().addAppendOrderByIgnoreNulls(orders);
-	}
-	
-	@Override
-	public DynamicDSL limit(int numberOfRows, int page) {
-		return (DynamicDSL) newDynamicDSLImpl().addLimit(numberOfRows, page);
-	}
-	
-	private DynamicDSLImpl newDynamicDSLImpl() {
-		return new DynamicDSLImpl(delegate, attributes.clone());
-	}
-	
-	private DynamicDSL addWhereIgnoreNulls(Condition... conditions) {
-		checkInvocations(attributes.condition, "where");
-		List<Condition> conds = FluentIterable
-				   .from(Lists.newArrayList(conditions))
-			       .filter(Predicates.notNull())
-			       .toList(); 
+    @Override
+    public DynamicDSL whereIgnoreNulls(Condition... conditions) {
+        return (DynamicDSL) newDynamicDSLImpl().addWhereIgnoreNulls(conditions);
+    }
 
-		if (! Iterables.isEmpty(conds)) {
-			attributes.condition = Predicate.and(conds);
-		}	
-		return this;
-	}
-	
-	private DynamicDSL addAppendOrderBy(Order... orders) {
-		
-		attributes.orders = ImmutableList.<Order>builder()
-				.addAll(attributes.orders)
-				.addAll(Lists.newArrayList(orders))
-				.build();
-		
-		return this;
-	}
-	
-	private DynamicDSL addAppendOrderByIgnoreNulls(Order... orders) {
-		List<Order> ords = FluentIterable
-				   .from(Lists.newArrayList(orders))
-			       .filter(Predicates.notNull())
-			       .toList(); 
-		
-		attributes.orders = ImmutableList.<Order>builder()
-								.addAll(attributes.orders)
-								.addAll(ords)
-								.build();
-		return this;
-	}
+    @Override
+    public DynamicDSL orderBy(Order order, Order... orders) {
+        return (DynamicDSL) newDynamicDSLImpl().addOrderBy(order, orders);
+    }
+
+    @Override
+    public DynamicDSL appendOrderBy(Order... orders) {
+        return (DynamicDSL) newDynamicDSLImpl().addAppendOrderBy(orders);
+    }
+
+    @Override
+    public DynamicDSL appendOrderByIgnoreNulls(Order... orders) {
+        return (DynamicDSL) newDynamicDSLImpl().addAppendOrderByIgnoreNulls(orders);
+    }
+
+    @Override
+    public DynamicDSL limit(int numberOfRows, int page) {
+        return (DynamicDSL) newDynamicDSLImpl().addLimit(numberOfRows, page);
+    }
+
+    private DynamicDSLImpl newDynamicDSLImpl() {
+        return new DynamicDSLImpl(delegate, attributes.clone());
+    }
+
+    private DynamicDSL addWhereIgnoreNulls(Condition... conditions) {
+        checkInvocations(attributes.condition, "where");
+        List<Condition> conds = FluentIterable
+                .from(Lists.newArrayList(conditions))
+                .filter(Predicates.notNull())
+                .toList();
+
+        if (!Iterables.isEmpty(conds)) {
+            attributes.condition = Predicate.and(conds);
+        }
+        return this;
+    }
+
+    private DynamicDSL addAppendOrderBy(Order... orders) {
+
+        attributes.orders = ImmutableList.<Order>builder()
+                .addAll(attributes.orders)
+                .addAll(Lists.newArrayList(orders))
+                .build();
+
+        return this;
+    }
+
+    private DynamicDSL addAppendOrderByIgnoreNulls(Order... orders) {
+        List<Order> ords = FluentIterable
+                .from(Lists.newArrayList(orders))
+                .filter(Predicates.notNull())
+                .toList();
+
+        attributes.orders = ImmutableList.<Order>builder()
+                .addAll(attributes.orders)
+                .addAll(ords)
+                .build();
+        return this;
+    }
 }

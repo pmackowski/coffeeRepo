@@ -23,74 +23,74 @@ import com.google.common.collect.ImmutableTable;
 import com.google.common.collect.Table;
 
 public class QueryExecutor {
-	
-	private static final int NOT_ALLOWED_TOTAL_RECORDS = -1;
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(QueryExecutor.class);
-	
-	protected final DataSource dataSource;
-	protected final DatabaseDriver databaseDriver;
 
-	QueryExecutor(DataSource dataSource, DatabaseDriver databaseDriver) {
-		checkNotNull(dataSource);
-		checkNotNull(databaseDriver);
-		this.dataSource = dataSource;
-		this.databaseDriver = databaseDriver;
-	}
+    private static final int NOT_ALLOWED_TOTAL_RECORDS = -1;
 
-	public QueryResult getResult(QueryAttributes attributes) {
-		checkNotNull(attributes);
-		String sql = getSQL(attributes);
-		List<Object> bindValues = databaseDriver.convertBindValues(attributes.getBindValues());
-		ImmutableTable<Integer,String,Object> table = executeQuery(sql, bindValues);
-		
-		int totalRecords = NOT_ALLOWED_TOTAL_RECORDS;
-		if (attributes.getNumberOfRows() != null) {
-			String countSql = getCountSQL(attributes);
-			totalRecords = executeCountQuery(countSql, bindValues);
-		} else {
-			totalRecords = table.rowKeySet().size();
-		}
-		QueryResult queryResult = new QueryResultImpl(table, sql, attributes, totalRecords);
-		LOGGER.debug("{}", queryResult);
-		return queryResult;
-	}
-	
-	protected final String getSQL(QueryAttributes attributes) {
-		return databaseDriver.createSQL(attributes);
-	}
-	
-	protected final String getCountSQL(QueryAttributes attributes) {
-		return databaseDriver.createCountSQL(attributes);
-	}
-	
-	protected final ImmutableTable<Integer,String, Object> executeQuery(String sql, List<Object> bindValues) {
-		LOGGER.debug("SQL [{}] with bind values {}", sql, bindValues);
-		Connection connection = null;
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
+    private static final Logger LOGGER = LoggerFactory.getLogger(QueryExecutor.class);
 
-		try {
-			connection = dataSource.getConnection();
-			stmt = prepareStatement(connection, sql, bindValues);
-			rs = stmt.executeQuery();
+    protected final DataSource dataSource;
+    protected final DatabaseDriver databaseDriver;
+
+    QueryExecutor(DataSource dataSource, DatabaseDriver databaseDriver) {
+        checkNotNull(dataSource);
+        checkNotNull(databaseDriver);
+        this.dataSource = dataSource;
+        this.databaseDriver = databaseDriver;
+    }
+
+    public QueryResult getResult(QueryAttributes attributes) {
+        checkNotNull(attributes);
+        String sql = getSQL(attributes);
+        List<Object> bindValues = databaseDriver.convertBindValues(attributes.getBindValues());
+        ImmutableTable<Integer, String, Object> table = executeQuery(sql, bindValues);
+
+        int totalRecords = NOT_ALLOWED_TOTAL_RECORDS;
+        if (attributes.getNumberOfRows() != null) {
+            String countSql = getCountSQL(attributes);
+            totalRecords = executeCountQuery(countSql, bindValues);
+        } else {
+            totalRecords = table.rowKeySet().size();
+        }
+        QueryResult queryResult = new QueryResultImpl(table, sql, attributes, totalRecords);
+        LOGGER.debug("{}", queryResult);
+        return queryResult;
+    }
+
+    protected final String getSQL(QueryAttributes attributes) {
+        return databaseDriver.createSQL(attributes);
+    }
+
+    protected final String getCountSQL(QueryAttributes attributes) {
+        return databaseDriver.createCountSQL(attributes);
+    }
+
+    protected final ImmutableTable<Integer, String, Object> executeQuery(String sql, List<Object> bindValues) {
+        LOGGER.debug("SQL [{}] with bind values {}", sql, bindValues);
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            connection = dataSource.getConnection();
+            stmt = prepareStatement(connection, sql, bindValues);
+            rs = stmt.executeQuery();
 
             return createTable(rs);
-		} catch (SQLException e) {
-			throw new QueryError(sql, bindValues, e);
-		} finally {
+        } catch (SQLException e) {
+            throw new QueryError(sql, bindValues, e);
+        } finally {
             closeConnection(connection, stmt, rs);
-		}
-		
-	}
+        }
+
+    }
 
     private ImmutableTable<Integer, String, Object> createTable(ResultSet rs) throws SQLException {
         ResultSetMetaData rsmd = rs.getMetaData();
-        Table<Integer,String, Object> table = HashBasedTable.create();
+        Table<Integer, String, Object> table = HashBasedTable.create();
         int i = 0;
         while (rs.next()) {
             i++;
-            for (int j=1; j<=rsmd.getColumnCount(); j++){
+            for (int j = 1; j <= rsmd.getColumnCount(); j++) {
                 String column = rsmd.getColumnName(j);
                 if (rs.getObject(column) != null) {
                     table.put(i, column, rs.getObject(column));
@@ -101,36 +101,45 @@ public class QueryExecutor {
     }
 
     protected final int executeCountQuery(String sql, List<Object> bindValues) {
-		LOGGER.debug("SQL [{}] with bind values {}", sql, bindValues);
-		Connection connection = null;
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
-		try {
-			connection = dataSource.getConnection();
-			stmt = prepareStatement(connection, sql, bindValues);
-			rs = stmt.executeQuery();
-			rs.next();
-			return rs.getInt("count(*)");
-		} catch (SQLException e) {
-			throw new QueryError(sql, bindValues, e);
-		} finally {
+        LOGGER.debug("SQL [{}] with bind values {}", sql, bindValues);
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            connection = dataSource.getConnection();
+            stmt = prepareStatement(connection, sql, bindValues);
+            rs = stmt.executeQuery();
+            rs.next();
+            return rs.getInt("count(*)");
+        } catch (SQLException e) {
+            throw new QueryError(sql, bindValues, e);
+        } finally {
             closeConnection(connection, stmt, rs);
-		}
-	}
+        }
+    }
 
     private void closeConnection(Connection connection, PreparedStatement stmt, ResultSet rs) {
-        try  { if (rs != null) rs.close(); } catch (SQLException e) {  }
-        try  { if (stmt != null) stmt.close(); } catch (SQLException e) {  }
-        try  { if (connection != null) connection.close(); } catch (SQLException e) {  }
+        try {
+            if (rs != null) rs.close();
+        } catch (SQLException e) {
+        }
+        try {
+            if (stmt != null) stmt.close();
+        } catch (SQLException e) {
+        }
+        try {
+            if (connection != null) connection.close();
+        } catch (SQLException e) {
+        }
     }
 
     private PreparedStatement prepareStatement(Connection connection, String sql, List<Object> bindValues) throws SQLException {
-		PreparedStatement stmt = connection.prepareStatement(sql);
-		int i = 1;
-		for (Object bindValue: bindValues) {
-			stmt.setObject(i++, bindValue);
-		}
-		return stmt;
-	}
-	
+        PreparedStatement stmt = connection.prepareStatement(sql);
+        int i = 1;
+        for (Object bindValue : bindValues) {
+            stmt.setObject(i++, bindValue);
+        }
+        return stmt;
+    }
+
 }

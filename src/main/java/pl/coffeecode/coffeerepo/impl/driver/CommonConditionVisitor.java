@@ -15,80 +15,80 @@ import pl.coffeecode.coffeerepo.impl.predicate.condition.ConditionNotEqual;
 
 public class CommonConditionVisitor implements ConditionVisitor {
 
-	@Override
-	public String toSQL(ConditionBeginsWith condition) {
-		return "upper(" + condition.getColumn() + ") like upper(? || '%')";
-	}
+    @Override
+    public String toSQL(ConditionBeginsWith condition) {
+        return "upper(" + condition.getColumn() + ") like upper(? || '%')";
+    }
 
-	@Override
-	public String toSQL(ConditionContains condition) {
-		return "upper(" + condition.getColumn() + ") like upper('%' || ? || '%')";
-	}
+    @Override
+    public String toSQL(ConditionContains condition) {
+        return "upper(" + condition.getColumn() + ") like upper('%' || ? || '%')";
+    }
 
-	@Override
-	public String toSQL(ConditionDoesNotBeginWith condition) {
-		return "upper(" + condition.getColumn() + ") not like upper(? || '%')";
-	}
+    @Override
+    public String toSQL(ConditionDoesNotBeginWith condition) {
+        return "upper(" + condition.getColumn() + ") not like upper(? || '%')";
+    }
 
-	@Override
-	public String toSQL(ConditionDoesNotContain condition) {
-		return "upper(" + condition.getColumn() + ") not like upper('%' || ? || '%')";
-	}
+    @Override
+    public String toSQL(ConditionDoesNotContain condition) {
+        return "upper(" + condition.getColumn() + ") not like upper('%' || ? || '%')";
+    }
 
-	@Override
-	public String toSQL(ConditionEqual condition) {
-		return condition.getColumn() + "= ?";
-	}
+    @Override
+    public String toSQL(ConditionEqual condition) {
+        return condition.getColumn() + "= ?";
+    }
 
-	@Override
-	public String toSQL(ConditionGreater condition) {
-		Object value = condition.getValue();
-		if (value instanceof String) {
-			return "upper(" + condition.getColumn() + ") > upper(?)";
-		}
-		return condition.getColumn() + "> ?";
-	}
+    @Override
+    public String toSQL(ConditionGreater condition) {
+        Object value = condition.getValue();
+        if (value instanceof String) {
+            return "upper(" + condition.getColumn() + ") > upper(?)";
+        }
+        return condition.getColumn() + "> ?";
+    }
 
-	@Override
-	public String toSQL(ConditionGreaterOrEqual condition) {
-		Object value = condition.getValue();
-		if (value instanceof String) {
-			return "upper(" + condition.getColumn() + ") >= upper(?)";
-		}
-		return condition.getColumn() + ">= ?";
-	}
+    @Override
+    public String toSQL(ConditionGreaterOrEqual condition) {
+        Object value = condition.getValue();
+        if (value instanceof String) {
+            return "upper(" + condition.getColumn() + ") >= upper(?)";
+        }
+        return condition.getColumn() + ">= ?";
+    }
 
-	@Override
-	public String toSQL(ConditionIsNotNull condition) {
-		return condition.getColumn() + " IS NOT NULL";
-	}
+    @Override
+    public String toSQL(ConditionIsNotNull condition) {
+        return condition.getColumn() + " IS NOT NULL";
+    }
 
-	@Override
-	public String toSQL(ConditionIsNull condition) {
-		return condition.getColumn() + " IS NULL";
-	}
+    @Override
+    public String toSQL(ConditionIsNull condition) {
+        return condition.getColumn() + " IS NULL";
+    }
 
-	@Override
-	public String toSQL(ConditionLess condition) {
-		Object value = condition.getValue();
-		if (value instanceof String) {
-			return "upper(" + condition.getColumn() + ") < upper(?)";
-		}
-		return condition.getColumn() + "< ?";
-	}
+    @Override
+    public String toSQL(ConditionLess condition) {
+        Object value = condition.getValue();
+        if (value instanceof String) {
+            return "upper(" + condition.getColumn() + ") < upper(?)";
+        }
+        return condition.getColumn() + "< ?";
+    }
 
-	@Override
-	public String toSQL(ConditionLessOrEqual condition) {
-		Object value = condition.getValue();
-		if (value instanceof String) {
-			return "upper(" + condition.getColumn() + ") <= upper(?)";
-		}
-		return condition.getColumn() + "<= ?";
-	}
+    @Override
+    public String toSQL(ConditionLessOrEqual condition) {
+        Object value = condition.getValue();
+        if (value instanceof String) {
+            return "upper(" + condition.getColumn() + ") <= upper(?)";
+        }
+        return condition.getColumn() + "<= ?";
+    }
 
-	@Override
-	public String toSQL(ConditionNotEqual condition) {
-		return condition.getColumn() + "!=?";
-	}
-	
+    @Override
+    public String toSQL(ConditionNotEqual condition) {
+        return condition.getColumn() + "!=?";
+    }
+
 }

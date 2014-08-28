@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <dataset>
-    <TEST_USER ID="1" NAME="PAwel" />
-	<TEST_USER ID="2" NAME="Panel" />
-	<TEST_USER ID="3" NAME="panel" />
-	<TEST_USER ID="4" NAME="PAnel" />
-	<TEST_USER ID="5" NAME="apanel" />
-	<TEST_USER ID="6" />
-	
+    <TEST_USER ID="1" NAME="PAwel"/>
+    <TEST_USER ID="2" NAME="Panel"/>
+    <TEST_USER ID="3" NAME="panel"/>
+    <TEST_USER ID="4" NAME="PAnel"/>
+    <TEST_USER ID="5" NAME="apanel"/>
+    <TEST_USER ID="6"/>
+
 </dataset>

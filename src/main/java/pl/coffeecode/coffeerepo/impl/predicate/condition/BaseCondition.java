@@ -7,20 +7,20 @@ import com.google.common.collect.ImmutableList;
 import java.util.Objects;
 
 public abstract class BaseCondition implements Condition {
-	
-	protected String column;
+
+    protected String column;
 
     protected BaseCondition(String column) {
         this.column = column;
     }
 
-	public ImmutableList<Object> getBindValues() {
-		return ImmutableList.of();
-	}
-	
-	public String getColumn() {
-		return column;
-	}
+    public ImmutableList<Object> getBindValues() {
+        return ImmutableList.of();
+    }
+
+    public String getColumn() {
+        return column;
+    }
 
     @Override
     public int hashCode() {

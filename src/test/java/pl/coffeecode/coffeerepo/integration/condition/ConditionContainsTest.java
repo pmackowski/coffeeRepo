@@ -19,36 +19,36 @@ import pl.coffeecode.coffeerepo.api.QueryResult;
 
 @RunWith(JUnitParamsRunner.class)
 public class ConditionContainsTest extends DBUnitTest {
-	
-	private static final String DATASET_FILE = "dbunit/condition_contains.xml";
 
-	@Test
-	@Parameters(method = "databases")
-	public void contains_should_ignore_case(SQLDialectDatasource dialectDatasource) {
-		prepare(dialectDatasource);
-		QueryResult result = dsl
-				
-				.select(C_NAME)
-				.from(VIEW_NAME)
-				.where(contains(C_NAME, "aN"))
-				.getResult();
-		
-		assertThat(result.getTotalRecords()).isEqualTo(2);
-		assertThat(rows(result.items())).are(new RowCondition() {
+    private static final String DATASET_FILE = "dbunit/condition_contains.xml";
 
-			@Override
-			public boolean matches(Map<String,Object> value) {
-				String name = value.get(C_NAME).toString().toLowerCase();
-				return name.contains("an");
-			}
-			
-		});
-	
-	}
-	
-	@Override
-	protected String getDatasetFilePath() {
-		return DATASET_FILE;
-	}
+    @Test
+    @Parameters(method = "databases")
+    public void contains_should_ignore_case(SQLDialectDatasource dialectDatasource) {
+        prepare(dialectDatasource);
+        QueryResult result = dsl
+
+                .select(C_NAME)
+                .from(VIEW_NAME)
+                .where(contains(C_NAME, "aN"))
+                .getResult();
+
+        assertThat(result.getTotalRecords()).isEqualTo(2);
+        assertThat(rows(result.items())).are(new RowCondition() {
+
+            @Override
+            public boolean matches(Map<String, Object> value) {
+                String name = value.get(C_NAME).toString().toLowerCase();
+                return name.contains("an");
+            }
+
+        });
+
+    }
+
+    @Override
+    protected String getDatasetFilePath() {
+        return DATASET_FILE;
+    }
 
 }

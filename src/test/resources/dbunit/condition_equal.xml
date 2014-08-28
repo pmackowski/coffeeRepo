@@ -3,10 +3,10 @@
 <dataset>
     <!--  NAME equal -->
     <TEST_USER ID="1" NAME="Pawel" HAS_CAR="1"/>
-	<TEST_USER ID="2" NAME="Pawel" HAS_CAR="1"/>
-	<!--  NAME does not equal -->
-	<TEST_USER ID="3" NAME="PAWEL" HAS_CAR="0"/>
-	<TEST_USER ID="4" NAME="Pawel2" HAS_CAR="1"/>
-	<TEST_USER ID="5"  />
-	
+    <TEST_USER ID="2" NAME="Pawel" HAS_CAR="1"/>
+    <!--  NAME does not equal -->
+    <TEST_USER ID="3" NAME="PAWEL" HAS_CAR="0"/>
+    <TEST_USER ID="4" NAME="Pawel2" HAS_CAR="1"/>
+    <TEST_USER ID="5"/>
+
 </dataset>

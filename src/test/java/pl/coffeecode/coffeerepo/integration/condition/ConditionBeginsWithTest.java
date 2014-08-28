@@ -19,36 +19,36 @@ import pl.coffeecode.coffeerepo.api.QueryResult;
 
 @RunWith(JUnitParamsRunner.class)
 public class ConditionBeginsWithTest extends DBUnitTest {
-	
-	private static final String DATASET_FILE = "dbunit/condition_begins_with.xml";
 
-	@Test
-	@Parameters(method = "databases")
-	public void begins_with_should_ignore_case(SQLDialectDatasource dialectDatasource) {
-		prepare(dialectDatasource);
-		QueryResult result = dsl
-				
-				.select(C_NAME)
-				.from(VIEW_NAME)
-				.where(beginsWith(C_NAME, "pA"))
-				.getResult();
-		
-		assertThat(result.getTotalRecords()).isEqualTo(2);
-		assertThat(rows(result.items())).are(new RowCondition() {
+    private static final String DATASET_FILE = "dbunit/condition_begins_with.xml";
 
-			@Override
-			public boolean matches(Map<String,Object> value) {
-				String name = value.get(C_NAME).toString().toUpperCase();
-				return name.startsWith("PA");
-			}
-			
-		});
-	
-	}
-	
-	@Override
-	protected String getDatasetFilePath() {
-		return DATASET_FILE;
-	}
+    @Test
+    @Parameters(method = "databases")
+    public void begins_with_should_ignore_case(SQLDialectDatasource dialectDatasource) {
+        prepare(dialectDatasource);
+        QueryResult result = dsl
+
+                .select(C_NAME)
+                .from(VIEW_NAME)
+                .where(beginsWith(C_NAME, "pA"))
+                .getResult();
+
+        assertThat(result.getTotalRecords()).isEqualTo(2);
+        assertThat(rows(result.items())).are(new RowCondition() {
+
+            @Override
+            public boolean matches(Map<String, Object> value) {
+                String name = value.get(C_NAME).toString().toUpperCase();
+                return name.startsWith("PA");
+            }
+
+        });
+
+    }
+
+    @Override
+    protected String getDatasetFilePath() {
+        return DATASET_FILE;
+    }
 
 }

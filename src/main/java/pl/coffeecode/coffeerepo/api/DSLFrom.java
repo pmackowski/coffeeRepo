@@ -2,6 +2,6 @@ package pl.coffeecode.coffeerepo.api;
 
 public interface DSLFrom {
 
-	DSLWhere from(String viewName);
-	
+    DSLWhere from(String viewName);
+
 }

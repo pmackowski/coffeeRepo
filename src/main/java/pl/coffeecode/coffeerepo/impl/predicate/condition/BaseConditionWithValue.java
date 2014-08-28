@@ -5,21 +5,21 @@ import com.google.common.collect.ImmutableList;
 import java.util.Objects;
 
 public abstract class BaseConditionWithValue extends BaseCondition {
-	
-	protected Object value;
 
-	protected BaseConditionWithValue(String column, Object value) {
-		super(column);
-		this.value = value;
-	}
+    protected Object value;
 
-	public Object getValue() {
-		return value;
-	}
+    protected BaseConditionWithValue(String column, Object value) {
+        super(column);
+        this.value = value;
+    }
 
-	public ImmutableList<Object> getBindValues() {
-		return ImmutableList.of(value);
-	}
+    public Object getValue() {
+        return value;
+    }
+
+    public ImmutableList<Object> getBindValues() {
+        return ImmutableList.of(value);
+    }
 
     @Override
     public int hashCode() {

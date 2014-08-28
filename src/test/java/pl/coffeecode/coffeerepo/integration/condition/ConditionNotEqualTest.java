@@ -18,36 +18,36 @@ import pl.coffeecode.coffeerepo.SQLDialectDatasource;
 import pl.coffeecode.coffeerepo.api.QueryResult;
 
 @RunWith(JUnitParamsRunner.class)
-public class ConditionNotEqualTest  extends DBUnitTest {
-	
-	private static final String DATASET_FILE = "dbunit/condition_not_equal.xml";
+public class ConditionNotEqualTest extends DBUnitTest {
 
-	@Test
-	@Parameters(method = "databases")
-	public void should_not_be_equal(SQLDialectDatasource dialectDatasource) {
-		prepare(dialectDatasource);
-		QueryResult result = dsl
-				
-				.select(C_NAME)
-				.from(VIEW_NAME)
-				.where(notEqual(C_NAME, "Pawel"))
-				.getResult();
-		
-		assertThat(result.getTotalRecords()).isEqualTo(2);
-		assertThat(rows(result.items())).are(new RowCondition() {
+    private static final String DATASET_FILE = "dbunit/condition_not_equal.xml";
 
-			@Override
-			public boolean matches(Map<String,Object> value) {
-				String name = value.get(C_NAME).toString();
-				return !name.equals("Pawel");
-			}
-			
-		});
-	
-	}
-	
-	@Override
-	protected String getDatasetFilePath() {
-		return DATASET_FILE;
-	}
+    @Test
+    @Parameters(method = "databases")
+    public void should_not_be_equal(SQLDialectDatasource dialectDatasource) {
+        prepare(dialectDatasource);
+        QueryResult result = dsl
+
+                .select(C_NAME)
+                .from(VIEW_NAME)
+                .where(notEqual(C_NAME, "Pawel"))
+                .getResult();
+
+        assertThat(result.getTotalRecords()).isEqualTo(2);
+        assertThat(rows(result.items())).are(new RowCondition() {
+
+            @Override
+            public boolean matches(Map<String, Object> value) {
+                String name = value.get(C_NAME).toString();
+                return !name.equals("Pawel");
+            }
+
+        });
+
+    }
+
+    @Override
+    protected String getDatasetFilePath() {
+        return DATASET_FILE;
+    }
 }

@@ -1,17 +1,17 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <dataset>
-	<!-- does not contain -->
-    <TEST_USER ID="1" NAME="PAwel" />
-    <TEST_USER ID="2" NAME="Piotr" />
-    <TEST_USER ID="3" NAME="apAbnel" />
-    
-	<!-- contains -->
-	<TEST_USER ID="4" NAME="apAnel" />
-	<TEST_USER ID="5" NAME="apAnel" />
-	<TEST_USER ID="6" NAME="Anel" />
-	<TEST_USER ID="7" NAME="apANel" />
-	<TEST_USER ID="8" NAME="apAn" />
-	<TEST_USER ID="9" NAME="Panel" />
-	
+    <!-- does not contain -->
+    <TEST_USER ID="1" NAME="PAwel"/>
+    <TEST_USER ID="2" NAME="Piotr"/>
+    <TEST_USER ID="3" NAME="apAbnel"/>
+
+    <!-- contains -->
+    <TEST_USER ID="4" NAME="apAnel"/>
+    <TEST_USER ID="5" NAME="apAnel"/>
+    <TEST_USER ID="6" NAME="Anel"/>
+    <TEST_USER ID="7" NAME="apANel"/>
+    <TEST_USER ID="8" NAME="apAn"/>
+    <TEST_USER ID="9" NAME="Panel"/>
+
 </dataset>
