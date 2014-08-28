@@ -10,12 +10,16 @@ import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 
 public class QueryResultDecorator {
-	
+
+    private QueryResultDecorator() {
+
+    }
+
 	public static Builder decorate(QueryResult queryResult) {
 		return new Builder(queryResult);
 	}
 	
-	public final static class Builder {
+	public static final class Builder {
 		
 		private QueryResult queryResult;
 		private Table<Integer, String, Object> table;

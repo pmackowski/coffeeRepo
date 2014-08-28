@@ -9,9 +9,12 @@ import pl.coffeecode.coffeerepo.impl.driver.DatabaseDriverResolver;
 
 import com.google.common.cache.Cache;
 
-public abstract class ViewRepository {
-	
-	public static DSL dsl(DataSource dataSource) {
+public class ViewRepository {
+
+    private ViewRepository() {
+    }
+
+    public static DSL dsl(DataSource dataSource) {
 		return new DSLImpl(dataSource, resolveSQLDialect(dataSource));
 	}
 

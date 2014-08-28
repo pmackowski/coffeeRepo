@@ -4,45 +4,39 @@ import pl.coffeecode.coffeerepo.api.Condition;
 
 import com.google.common.collect.ImmutableList;
 
+import java.util.Objects;
+
 public abstract class BaseCondition implements Condition {
 	
 	protected String column;
-	
+
+    protected BaseCondition(String column) {
+        this.column = column;
+    }
+
 	public ImmutableList<Object> getBindValues() {
 		return ImmutableList.of();
 	}
 	
-	protected BaseCondition(String column) {
-		this.column = column;
-	}
-
 	public String getColumn() {
 		return column;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((column == null) ? 0 : column.hashCode());
-		return result;
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(column);
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		BaseCondition other = (BaseCondition) obj;
-		if (column == null) {
-			if (other.column != null)
-				return false;
-		} else if (!column.equals(other.column))
-			return false;
-		return true;
-	}
-	
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        final BaseCondition other = (BaseCondition) obj;
+        return Objects.equals(this.column, other.column);
+    }
+
 }

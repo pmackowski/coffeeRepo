@@ -3,6 +3,7 @@ package pl.coffeecode.coffeerepo.impl.predicate;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.List;
+import java.util.Objects;
 
 import pl.coffeecode.coffeerepo.api.Condition;
 import pl.coffeecode.coffeerepo.impl.driver.ConditionVisitor;
@@ -15,7 +16,8 @@ public class ConditionExpression implements Condition {
 	protected Operator operator;
 	protected ImmutableList<Condition> conditions;
 	
-	protected ConditionExpression() {}
+	private ConditionExpression() {
+    }
 	
 	public ConditionExpression(Operator operator, ImmutableList<Condition> conditions) {
 		checkNotNull(operator, "Operator must be not null.");
@@ -73,40 +75,27 @@ public class ConditionExpression implements Condition {
 	public enum Operator {
 		NOT, AND, OR;
 	}
-	
-	@Override
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(operator, conditions);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        final ConditionExpression other = (ConditionExpression) obj;
+        return Objects.equals(this.operator, other.operator) && Objects.equals(this.conditions, other.conditions);
+    }
+
+    @Override
 	public String toString() {
 		return "ConditionExpression [operator=" + operator + ", conditions=" + conditions	+ "]";
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result
-				+ ((conditions == null) ? 0 : conditions.hashCode());
-		result = prime * result
-				+ ((operator == null) ? 0 : operator.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		ConditionExpression other = (ConditionExpression) obj;
-		if (conditions == null) {
-			if (other.conditions != null)
-				return false;
-		} else if (!conditions.equals(other.conditions))
-			return false;
-		if (operator != other.operator)
-			return false;
-		return true;
 	}
 
 }

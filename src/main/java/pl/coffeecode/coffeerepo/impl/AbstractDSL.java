@@ -10,6 +10,8 @@ import pl.coffeecode.coffeerepo.api.QueryAttributes;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
+import java.util.Objects;
+
 public class AbstractDSL {
 	
 	private static final String TOO_MANY_INVOCATIONS_MSG = "too many invocations of method '%s'";
@@ -151,66 +153,23 @@ public class AbstractDSL {
 		public QueryAttributesImpl clone() {
 			return new QueryAttributesImpl(columns, viewName, numberOfRows, page, condition, orders);
 		}
-		
-		@Override
-		public int hashCode() {
-			final int prime = 31;
-			int result = 1;
-			result = prime * result
-					+ ((columns == null) ? 0 : columns.hashCode());
-			result = prime * result
-					+ ((condition == null) ? 0 : condition.hashCode());
-			result = prime * result
-					+ ((numberOfRows == null) ? 0 : numberOfRows.hashCode());
-			result = prime * result
-					+ ((orders == null) ? 0 : orders.hashCode());
-			result = prime * result + ((page == null) ? 0 : page.hashCode());
-			result = prime * result
-					+ ((viewName == null) ? 0 : viewName.hashCode());
-			return result;
-		}
 
-		@Override
-		public boolean equals(Object obj) {
-			if (this == obj)
-				return true;
-			if (obj == null)
-				return false;
-			if (getClass() != obj.getClass())
-				return false;
-			QueryAttributesImpl other = (QueryAttributesImpl) obj;
-			if (columns == null) {
-				if (other.columns != null)
-					return false;
-			} else if (!columns.equals(other.columns))
-				return false;
-			if (condition == null) {
-				if (other.condition != null)
-					return false;
-			} else if (!condition.equals(other.condition))
-				return false;
-			if (numberOfRows == null) {
-				if (other.numberOfRows != null)
-					return false;
-			} else if (!numberOfRows.equals(other.numberOfRows))
-				return false;
-			if (orders == null) {
-				if (other.orders != null)
-					return false;
-			} else if (!orders.equals(other.orders))
-				return false;
-			if (page == null) {
-				if (other.page != null)
-					return false;
-			} else if (!page.equals(other.page))
-				return false;
-			if (viewName == null) {
-				if (other.viewName != null)
-					return false;
-			} else if (!viewName.equals(other.viewName))
-				return false;
-			return true;
-		}
+        @Override
+        public int hashCode() {
+            return Objects.hash(columns, viewName, numberOfRows, page, condition, orders);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null || getClass() != obj.getClass()) {
+                return false;
+            }
+            final QueryAttributesImpl other = (QueryAttributesImpl) obj;
+            return Objects.equals(this.columns, other.columns) && Objects.equals(this.viewName, other.viewName) && Objects.equals(this.numberOfRows, other.numberOfRows) && Objects.equals(this.page, other.page) && Objects.equals(this.condition, other.condition) && Objects.equals(this.orders, other.orders);
+        }
 
 		@Override
 		public String toString() {

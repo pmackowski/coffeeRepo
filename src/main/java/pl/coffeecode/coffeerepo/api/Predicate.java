@@ -33,8 +33,11 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 
 public class Predicate {
-	
-	// ConditionExpression
+
+    private Predicate() {
+    }
+
+    // ConditionExpression
 	public static Condition or(Condition... conditions) {	
 		return or(ImmutableList.copyOf(conditions));
 	}

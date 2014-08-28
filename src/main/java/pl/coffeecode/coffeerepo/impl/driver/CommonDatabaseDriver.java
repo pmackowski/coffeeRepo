@@ -9,7 +9,7 @@ import com.google.common.collect.ImmutableList;
 
 public abstract class CommonDatabaseDriver implements DatabaseDriver {
 	
-	private final static String EMPTY_STRING = "";
+	private static final String EMPTY_STRING = "";
 	
 	protected abstract ConditionVisitor getConditionVisitor();
 	

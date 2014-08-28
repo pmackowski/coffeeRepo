@@ -71,6 +71,6 @@ public class OracleDriver extends CommonDatabaseDriver implements DatabaseDriver
 		if (input == null) {
 			return null;
 		}
-		return input == true ? 1 : 0;
+		return input ? 1 : 0;
 	}
 }

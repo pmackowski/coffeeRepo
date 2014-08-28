@@ -20,7 +20,6 @@ public class Pattern implements RowFunction<String> {
 		for (String column : columns) {
 			ret = ret.replaceFirst("%s", input.get(column) == null ? "" : input.get(column).toString());
 		}
-		//return String.format(pattern, columns);
 		return ret;
 	}
 

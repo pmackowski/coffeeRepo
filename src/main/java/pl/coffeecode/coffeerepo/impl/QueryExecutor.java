@@ -26,7 +26,7 @@ public class QueryExecutor {
 	
 	private static final int NOT_ALLOWED_TOTAL_RECORDS = -1;
 	
-	private static final Logger logger = LoggerFactory.getLogger(QueryExecutor.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(QueryExecutor.class);
 	
 	protected final DataSource dataSource;
 	protected final DatabaseDriver databaseDriver;
@@ -52,7 +52,7 @@ public class QueryExecutor {
 			totalRecords = table.rowKeySet().size();
 		}
 		QueryResult queryResult = new QueryResultImpl(table, sql, attributes, totalRecords);
-		logger.debug("{}", queryResult);
+		LOGGER.debug("{}", queryResult);
 		return queryResult;
 	}
 	
@@ -65,42 +65,43 @@ public class QueryExecutor {
 	}
 	
 	protected final ImmutableTable<Integer,String, Object> executeQuery(String sql, List<Object> bindValues) {
-		logger.debug("SQL [{}] with bind values {}", sql, bindValues);
+		LOGGER.debug("SQL [{}] with bind values {}", sql, bindValues);
 		Connection connection = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		Table<Integer,String, Object> table = HashBasedTable.create();
-		
+
 		try {
 			connection = dataSource.getConnection();
 			stmt = prepareStatement(connection, sql, bindValues);
 			rs = stmt.executeQuery();
-			
-			ResultSetMetaData rsmd = rs.getMetaData();
 
-			int i = 0;
-			while (rs.next()) {
-				i++;
-				for (int j=1; j<=rsmd.getColumnCount(); j++){
-					String column = rsmd.getColumnName(j);
-					if (rs.getObject(column) != null) {
-						table.put(i, column, rs.getObject(column));
-					}	
-				}
-			}
-			return ImmutableTable.copyOf(table);
+            return createTable(rs);
 		} catch (SQLException e) {
 			throw new QueryError(sql, bindValues, e);
 		} finally {
-			try  { if (rs != null) rs.close(); } catch (SQLException e) {  } 
-			try  { if (stmt != null) stmt.close(); } catch (SQLException e) {  }
-			try  { if (connection != null) connection.close(); } catch (SQLException e) {  }
+            closeConnection(connection, stmt, rs);
 		}
 		
 	}
-	
-	protected final int executeCountQuery(String sql, List<Object> bindValues) {
-		logger.debug("SQL [{}] with bind values {}", sql, bindValues);
+
+    private ImmutableTable<Integer, String, Object> createTable(ResultSet rs) throws SQLException {
+        ResultSetMetaData rsmd = rs.getMetaData();
+        Table<Integer,String, Object> table = HashBasedTable.create();
+        int i = 0;
+        while (rs.next()) {
+            i++;
+            for (int j=1; j<=rsmd.getColumnCount(); j++){
+                String column = rsmd.getColumnName(j);
+                if (rs.getObject(column) != null) {
+                    table.put(i, column, rs.getObject(column));
+                }
+            }
+        }
+        return ImmutableTable.copyOf(table);
+    }
+
+    protected final int executeCountQuery(String sql, List<Object> bindValues) {
+		LOGGER.debug("SQL [{}] with bind values {}", sql, bindValues);
 		Connection connection = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
@@ -113,13 +114,17 @@ public class QueryExecutor {
 		} catch (SQLException e) {
 			throw new QueryError(sql, bindValues, e);
 		} finally {
-			try  { if (rs != null) rs.close(); } catch (SQLException e) {  } 
-			try  { if (stmt != null) stmt.close(); } catch (SQLException e) {  }
-			try  { if (connection != null) connection.close(); } catch (SQLException e) {  }
+            closeConnection(connection, stmt, rs);
 		}
 	}
 
-	private PreparedStatement prepareStatement(Connection connection, String sql, List<Object> bindValues) throws SQLException {
+    private void closeConnection(Connection connection, PreparedStatement stmt, ResultSet rs) {
+        try  { if (rs != null) rs.close(); } catch (SQLException e) {  }
+        try  { if (stmt != null) stmt.close(); } catch (SQLException e) {  }
+        try  { if (connection != null) connection.close(); } catch (SQLException e) {  }
+    }
+
+    private PreparedStatement prepareStatement(Connection connection, String sql, List<Object> bindValues) throws SQLException {
 		PreparedStatement stmt = connection.prepareStatement(sql);
 		int i = 1;
 		for (Object bindValue: bindValues) {

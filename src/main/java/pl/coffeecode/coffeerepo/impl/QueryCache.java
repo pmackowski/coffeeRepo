@@ -18,7 +18,7 @@ import com.google.common.cache.Cache;
 
 public class QueryCache extends QueryExecutor {
 	
-	private static final Logger logger = LoggerFactory.getLogger(QueryCache.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(QueryCache.class);
 	
 	private final Cache<QueryAttributes,QueryResult> cache;
 	
@@ -39,7 +39,7 @@ public class QueryCache extends QueryExecutor {
 						}
 					});
 		} catch (ExecutionException ex) {
-			logger.warn("Problem with loading from cache, we are trying to retrive data from database!");
+			LOGGER.warn("Problem with loading from cache, we are trying to retrive data from database!");
 			return super.getResult(attributes);
 		}
 	}
