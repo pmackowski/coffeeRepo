@@ -93,7 +93,7 @@ public class QueryExecutor {
             for (int j = 1; j <= rsmd.getColumnCount(); j++) {
                 String column = rsmd.getColumnName(j);
                 if (rs.getObject(column) != null) {
-                    table.put(i, column, rs.getObject(column));
+                    table.put(i, column.toUpperCase(), rs.getObject(column));
                 }
             }
         }
