@@ -1,23 +1,21 @@
 package pl.coffeecode.coffeerepo.impl.driver;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import pl.coffeecode.coffeerepo.impl.driver.h2.H2Driver;
+import pl.coffeecode.coffeerepo.impl.driver.oracle.OracleDriver;
+
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
-
-import javax.sql.DataSource;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import pl.coffeecode.coffeerepo.impl.driver.h2.H2Driver;
-import pl.coffeecode.coffeerepo.impl.driver.oracle.OracleDriver;
 
 public class DatabaseDriverResolver {
 
     private static final Logger logger = LoggerFactory.getLogger(DatabaseDriverResolver.class);
 
     public DatabaseDriver resolveDatabase(DataSource dataSource) {
-        Connection connection;
+        Connection connection = null;
         try {
             connection = dataSource.getConnection();
             DatabaseMetaData metaData = connection.getMetaData();
@@ -34,9 +32,16 @@ public class DatabaseDriverResolver {
             throw new DatabaseDriverNotSupportedException(databaseName + " is not supported yet!");
         } catch (SQLException e) {
             logger.error("No database driver detected! Error message {}", e.getMessage());
+            return null;
+        } finally {
+            closeConnection(connection);
         }
-
-        return null;
     }
 
+    private void closeConnection(Connection connection) {
+        try {
+            if (connection != null) connection.close();
+        } catch (SQLException e) {
+        }
+    }
 }
