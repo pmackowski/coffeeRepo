@@ -10,10 +10,6 @@
         </encoder>
     </appender>
 
-    <logger name="pl.coffeecode.coffeerepo.impl.QueryExecutor" level="DEBUG" additivity="false">
-        <appender-ref ref="STDOUT"/>
-    </logger>
-
     <logger name="pl.coffeecode.coffeerepo.impl.driver.SQLDialectResolver" level="DEBUG" additivity="false">
         <appender-ref ref="STDOUT"/>
     </logger>
