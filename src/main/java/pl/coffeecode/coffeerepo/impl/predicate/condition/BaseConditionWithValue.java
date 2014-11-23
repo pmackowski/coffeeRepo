@@ -10,7 +10,7 @@ public abstract class BaseConditionWithValue extends BaseCondition {
 
     protected BaseConditionWithValue(String column, Object value) {
         super(column);
-        this.value = value;
+        this.value = Objects.requireNonNull(value);
     }
 
     public Object getValue() {
