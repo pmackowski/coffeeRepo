@@ -18,4 +18,9 @@ public interface QueryResult {
      */
     int getTotalRecords();
 
+    /**
+     * @return if limit clause is used then total pages, otherwise 1
+     */
+    int getTotalPages();
+
 }

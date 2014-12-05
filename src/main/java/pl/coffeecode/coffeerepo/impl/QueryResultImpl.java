@@ -17,6 +17,7 @@ public class QueryResultImpl implements QueryResult {
     private String sql;
     private QueryAttributes queryAttributes;
     private int totalRecords;
+    private int totalPages;
 
     public QueryResultImpl(Table<Integer, String, Object> items, String sql, QueryAttributes queryAttributes, int totalRecords) {
         checkNotNull(items);
@@ -27,6 +28,12 @@ public class QueryResultImpl implements QueryResult {
         this.sql = sql;
         this.queryAttributes = queryAttributes;
         this.totalRecords = totalRecords;
+        Integer numberOfRows = queryAttributes.getNumberOfRows();
+        if (numberOfRows == null) {
+            this.totalPages = 1;
+        } else {
+            this.totalPages = totalRecords / numberOfRows + ((totalRecords % numberOfRows == 0) ? 0 : 1);
+        }
     }
 
     public Table<Integer, String, Object> items() {
@@ -43,6 +50,11 @@ public class QueryResultImpl implements QueryResult {
 
     public int getTotalRecords() {
         return totalRecords;
+    }
+
+    @Override
+    public int getTotalPages() {
+        return totalPages;
     }
 
     @Override
